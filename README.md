@@ -1,50 +1,72 @@
-# React + TypeScript + Vite
+# OneDrive-like File Explorer Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, fully responsive file explorer application built using **Vite.js**, **TypeScript**, **Material UI**, and **Tailwind CSS**. The application allows users to upload, manage, and interact with files in a sleek and intuitive user interface similar to OneDrive. 
 
-Currently, two official plugins are available:
+### Key Features:
+1. **File Upload & Drag-and-Drop**:
+   - Users can drag and drop files onto the main page to upload.
+   - A file input button is also available for file selection.
+   - Displays an upload progress indicator.
+   - Handles errors such as invalid file type or large file size.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2. **File Listing with Table UI**:
+   - Uploaded files are displayed in a Material UI table.
+   - Table columns include: `File name`, `Size`, `Upload date`, `Actions`.
+   - Clicking on a row reveals an action banner with file options.
+   - Responsive design ensures the table adjusts for all screen sizes.
 
-## Expanding the ESLint configuration
+3. **Action Banner**:
+   - When a row is clicked, an action banner with options like `Download`, `Rename`, `Delete`, and `More` is shown.
+   - The banner closes when clicking outside.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+4. **State Management & Performance**:
+   - Uses React hooks with TypeScript types for state management.
+   - Efficient rendering with minimal re-renders to optimize performance.
 
-- Configure the top-level `parserOptions` property like this:
+5. **Styling & UI**:
+   - Material UI components for core functionality.
+   - Tailwind CSS for layout and utility styling.
+   - Smooth animations and transitions ensure a modern, clean design.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+6. **Responsiveness & Mobile Support**:
+   - Fully responsive for various screen sizes and devices.
+   - Mobile-friendly interactions for file management.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+7. **Accessibility & UX**:
+   - Keyboard navigation support (using arrows, Enter, Delete, etc.).
+   - Properly implemented focus states and aria attributes for accessibility.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+8. **Performance Optimizations**:
+   - Lazy loading for large file lists.
+   - Minimizes unnecessary re-renders to improve app performance.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+---
+
+## Project Structure
+
+```plaintext
+src/
+│
+├── components/                # Reusable UI components
+│   ├── FileTable.tsx           # Table component to display files
+│   ├── FileUpload.tsx         # File upload UI (Drag & Drop + Button)
+│   ├── ActionBanner.tsx       # Banner for file actions (Download, Rename, Delete)
+│   └── FileCard.tsx           # File Card for individual file display
+│
+├── hooks/                     # Custom hooks for API calls and state management
+│   ├── useFileUpload.ts       # Hook for handling file uploads
+│   ├── useFileActions.ts      # Hook for handling file actions (Download, Rename, Delete)
+│   └── useFileList.ts         # Hook for fetching and managing file list data
+│
+├── types/                     # TypeScript types and interfaces
+│   ├── file.ts                # Types for file data (name, size, etc.)
+│   └── api.ts                 # API response types and request interfaces
+│
+├── services/                  # API services
+│   ├── fileService.ts         # API integration for file management (upload, delete, rename)
+│
+├── App.tsx                    # Main App component
+├── index.tsx                  # Entry point of the application
+├── vite.config.ts             # Vite.js configuration
+└── tailwind.config.js         # Tailwind CSS configuration
 ```
