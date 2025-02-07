@@ -70,3 +70,77 @@ src/
 ├── vite.config.ts             # Vite.js configuration
 └── tailwind.config.js         # Tailwind CSS configuration
 ```
+
+
+## API Integration
+
+The app does not include a backend but assumes an API for file management:
+
+1.  **Upload**: `POST /api/upload`
+    
+    -   Body: `multipart/form-data` with the file(s).
+    -   Response: `{ id: string, name: string, size: number, uploadDate: string }`
+2.  **Delete**: `DELETE /api/files/:id`
+    
+    -   Params: File ID
+    -   Response: `{ success: boolean }`
+3.  **Rename**: `PUT /api/files/:id`
+    
+    -   Params: File ID
+    -   Body: `{ name: string }`
+    -   Response: `{ success: boolean, name: string }`
+4.  **Download**: `GET /api/files/:id`
+    
+    -   Params: File ID
+    -   Response: File data
+
+These API endpoints should be set up on your server and the `fileService.ts` file is responsible for handling these API requests.
+
+----------
+
+## Usage
+
+### File Upload & Drag-and-Drop
+
+-   Users can click the "Upload Files" button or drag and drop files into the UI.
+-   Upload progress is shown for each file, and errors such as invalid file types or large file sizes are handled gracefully.
+
+### File Table
+
+-   Files are displayed in a responsive table with columns for `File Name`, `Size`, `Upload Date`, and `Actions`.
+-   Clicking on a row reveals an action banner where users can `Download`, `Rename`, or `Delete` the file.
+
+### Action Banner
+
+-   The action banner appears when a file is clicked and can be used to perform operations on the file.
+-   Clicking outside the banner closes it.
+
+----------
+
+## Contributing
+
+We welcome contributions to improve the application. To contribute:
+
+1.  Fork the repository
+2.  Create a new branch (`git checkout -b feature-name`)
+3.  Commit your changes (`git commit -am 'Add new feature'`)
+4.  Push to your branch (`git push origin feature-name`)
+5.  Open a Pull Request
+
+----------
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+----------
+
+## Acknowledgements
+
+-   **Material UI**: For the beautiful and highly customizable UI components.
+-   **Tailwind CSS**: For utility-first styling.
+-   **Vite.js**: For fast and modern development tooling.
+
+markdown
+
+CopyEdit
