@@ -22,8 +22,9 @@ export function Sidebar() {
   const renderSidebarItem = (item: SidebarItemType, indent = 0) => {
     const isExpanded = expandedItems.includes(item.key!);
     const activeKey = searchParams.get('active_key');
-    const isActive = activeKey === item.key;
+    const isActive = activeKey == item.key;
     const hasChildren = !!item.children?.length;
+    console.log('isActive', isActive);
 
     const handleClick = (event: React.MouseEvent) => {
       event.preventDefault();
@@ -32,7 +33,7 @@ export function Sidebar() {
         toggleExpand(item);
       }
 
-      if (!hasChildren && item.key) {
+      if (item.key) {
         setSearchParams({ active_key: item.key });
         navigate(`/${item.key}`);
       }

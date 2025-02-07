@@ -1,16 +1,6 @@
 'use client';
 
-import {
-  ChevronDown,
-  Clipboard,
-  Copy,
-  File,
-  Folder,
-  LayoutList,
-  Plus,
-  Scissors,
-  Trash,
-} from 'lucide-react';
+import { File, Folder } from 'lucide-react';
 
 export function FileExplorer() {
   return (
@@ -18,56 +8,6 @@ export function FileExplorer() {
       {/* Main content area */}
       <div className="flex-1 flex flex-col">
         <>
-          <div className="bg-[#1c1c1c] border-b border-gray-800 flex items-center h-12 px-2 gap-2">
-            <div className="flex items-center gap-1">
-              <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
-                <Plus size={16} />
-                New
-                <ChevronDown size={16} />
-              </button>
-              <div className="h-4 w-px bg-gray-700 mx-1" />
-              <button
-                className="p-2 hover:bg-gray-700 rounded"
-                title="Cut">
-                <Scissors size={16} />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-700 rounded"
-                title="Copy">
-                <Copy size={16} />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-700 rounded"
-                title="Paste">
-                <Clipboard size={16} />
-              </button>
-              <div className="h-4 w-px bg-gray-700 mx-1" />
-              <button
-                className="p-2 hover:bg-gray-700 rounded"
-                title="Delete">
-                <Trash size={16} />
-              </button>
-            </div>
-            <div className="flex-1" />
-            <div className="flex items-center gap-1">
-              <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
-                Sort
-                <ChevronDown size={16} />
-              </button>
-              <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
-                View
-                <ChevronDown size={16} />
-              </button>
-              <div className="h-4 w-px bg-gray-700 mx-1" />
-              <button
-                className="p-2 hover:bg-gray-700 rounded"
-                title="Details">
-                <LayoutList size={16} />
-              </button>
-            </div>
-          </div>
-
-          {/* Existing content */}
           <div className="flex-1 overflow-hidden">
             <div className="grid grid-cols-[1fr_200px_150px_100px] gap-1 p-2 text-sm border-b border-gray-800">
               <div>Name</div>

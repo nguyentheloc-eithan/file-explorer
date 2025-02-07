@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { UfyleLayout } from './components/layout';
 import { HomeView } from './components/HomeView';
+import { FileExplorer } from './components/FileExplorer';
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
         />
         <Route
           path="/recents"
-          element={<div>Recents</div>}
+          element={<FileExplorer />}
         />
         <Route
           path="/shared"
