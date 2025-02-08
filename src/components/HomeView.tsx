@@ -15,15 +15,14 @@ import { cn } from '../lib/utils';
 
 export function HomeView() {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
   return (
     <div className="h-screen flex flex-col bg-[#202020] text-gray-200">
       {/* Quick access section */}
       <div className="flex-1 p-4 overflow-auto">
         <div className="space-y-6">
           <section>
-            <h2 className="text-sm font-semibold mb-3">Quick access</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <h2 className="mb-3 text-sm font-semibold">Quick access</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               <QuickAccessItem
                 icon={<Monitor size={20} />}
                 name="Desktop"
@@ -68,7 +67,7 @@ export function HomeView() {
           </section>
 
           <section>
-            <h2 className="text-sm font-semibold mb-3">Recent files</h2>
+            <h2 className="mb-3 text-sm font-semibold">Recent files</h2>
             <div className="space-y-1">
               {recentFiles.map((file) => (
                 <div
@@ -104,7 +103,7 @@ function QuickAccessItem({
   location: string;
 }) {
   return (
-    <div className="flex items-center gap-3 p-3 rounded hover:bg-gray-800 cursor-pointer border border-gray-800">
+    <div className="flex items-center gap-3 p-3 border border-gray-800 rounded cursor-pointer hover:bg-gray-800">
       <div className="text-blue-400">{icon}</div>
       <div className="flex-1 min-w-0">
         <div className="text-sm font-medium truncate">{name}</div>

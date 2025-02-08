@@ -7,7 +7,7 @@ import { sidebarConfig, SidebarItemType } from '@/configs/sidebar-config';
 export function Sidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const toggleExpand = (item: SidebarItemType) => {
     if (item.children) {
@@ -21,28 +21,28 @@ export function Sidebar() {
 
   const renderSidebarItem = (item: SidebarItemType, indent = 0) => {
     const isExpanded = expandedItems.includes(item.key!);
-    const activeKey = searchParams.get('active_key');
-    const isActive = activeKey == item.key;
+    const activeKey = searchParams.get('ak');
+    const isActive = activeKey === item.key;
     const hasChildren = !!item.children?.length;
-    console.log('isActive', isActive);
 
-    const handleClick = (event: React.MouseEvent) => {
+    const handleClick = (event: React.MouseEvent, item: SidebarItemType) => {
       event.preventDefault();
 
-      if (hasChildren) {
+      if (item.children) {
         toggleExpand(item);
+        return;
       }
 
       if (item.key) {
-        setSearchParams({ active_key: item.key });
-        navigate(`/${item.key}`);
+        const keyActivestring = `ak=${item.key}`;
+        navigate(`/${item.key}?${keyActivestring}`);
       }
     };
 
     return (
       <div key={item.key}>
         <button
-          onClick={handleClick}
+          onClick={(event) => handleClick(event, item)}
           className={cn(
             'flex items-center gap-2 w-full px-2 py-1 text-sm rounded hover:bg-gray-800',
             isActive && 'bg-gray-700',
@@ -71,7 +71,7 @@ export function Sidebar() {
 
   return (
     <div className="w-48 bg-[#202020] border-r border-gray-800">
-      <nav className="space-y-1 p-2">
+      <nav className="p-2 space-y-1">
         {sidebarConfig.map((item) => renderSidebarItem(item))}
       </nav>
     </div>

@@ -1,7 +1,7 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { UfyleLayout } from './components/layout';
-import { HomeView } from './components/HomeView';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { FileExplorer } from './components/FileExplorer';
+import { UfyleLayout } from './components/layout';
+import { HomePage } from './pages/home-page';
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
       <Route element={<UfyleLayout />}>
         <Route
           path="/home"
-          element={<HomeView />}
+          element={<HomePage />}
         />
         <Route
           path="/documents"

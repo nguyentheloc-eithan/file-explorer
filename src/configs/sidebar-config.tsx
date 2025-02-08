@@ -1,4 +1,5 @@
 import {
+  FileClock,
   FileText,
   Home,
   Image,
@@ -24,7 +25,7 @@ export const sidebarConfig: SidebarItemType[] = [
     key: 'home',
   },
   {
-    icon: <Image size={16} />,
+    icon: <FileClock size={16} />,
     label: 'Recents',
     key: 'recents',
   },

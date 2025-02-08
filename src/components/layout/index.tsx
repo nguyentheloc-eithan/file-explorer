@@ -10,8 +10,9 @@ import {
   Search,
   Trash,
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
+import { InfoPanel } from './InfoPanel';
 import { Sidebar } from './Sidebar';
 
 export function UfyleLayout() {
@@ -26,7 +27,7 @@ export function UfyleLayout() {
   };
 
   useEffect(() => {
-    const activeKey = searchParams.get('active_key');
+    const activeKey = searchParams.get('ak');
     const cleanedKey = cleanKey(activeKey);
     setSelectedItemKey(cleanedKey);
   }, [searchParams]);
@@ -35,11 +36,11 @@ export function UfyleLayout() {
     <div className="h-screen flex bg-[#202020] text-gray-200">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-col flex-1">
         {/* Header toolbar */}
         <div className="bg-[#1c1c1c] border-b border-gray-800 flex items-center h-12 px-2 gap-2">
           <div className="flex items-center gap-1">
-            <button className="p-2 hover:bg-gray-700 rounded">
+            <button className="p-2 rounded hover:bg-gray-700">
               <RotateCcw size={16} />
             </button>
           </div>
@@ -47,10 +48,10 @@ export function UfyleLayout() {
             <ChevronRight size={16} />
             <span>{selectedItemKey}</span>
           </div>
-          <div className="flex-1 flex justify-end">
+          <div className="flex justify-end flex-1">
             <div className="relative w-72">
               <Search
-                className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute text-gray-400 -translate-y-1/2 left-2 top-1/2"
                 size={16}
               />
               <input
@@ -66,47 +67,46 @@ export function UfyleLayout() {
 
         <div className="bg-[#1c1c1c] border-b border-gray-800 flex items-center h-12 px-2 gap-2">
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
+            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
               <Plus size={16} />
               New
-              <ChevronDown size={16} />
             </button>
-            <div className="h-4 w-px bg-gray-700 mx-1" />
+            <div className="w-px h-4 mx-1 bg-gray-700" />
             <button
-              className="p-2 hover:bg-gray-700 rounded"
+              className="p-2 rounded hover:bg-gray-700"
               title="Cut">
               <Scissors size={16} />
             </button>
             <button
-              className="p-2 hover:bg-gray-700 rounded"
+              className="p-2 rounded hover:bg-gray-700"
               title="Copy">
               <Copy size={16} />
             </button>
             <button
-              className="p-2 hover:bg-gray-700 rounded"
+              className="p-2 rounded hover:bg-gray-700"
               title="Paste">
               <Clipboard size={16} />
             </button>
-            <div className="h-4 w-px bg-gray-700 mx-1" />
+            <div className="w-px h-4 mx-1 bg-gray-700" />
             <button
-              className="p-2 hover:bg-gray-700 rounded"
+              className="p-2 rounded hover:bg-gray-700"
               title="Delete">
               <Trash size={16} />
             </button>
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
+            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
               Sort
               <ChevronDown size={16} />
             </button>
-            <button className="flex items-center gap-1 px-3 py-1 hover:bg-gray-700 rounded text-sm">
+            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
               View
               <ChevronDown size={16} />
             </button>
-            <div className="h-4 w-px bg-gray-700 mx-1" />
+            <div className="w-px h-4 mx-1 bg-gray-700" />
             <button
-              className="p-2 hover:bg-gray-700 rounded"
+              className="p-2 rounded hover:bg-gray-700"
               title="Details">
               <LayoutList size={16} />
             </button>
@@ -116,13 +116,7 @@ export function UfyleLayout() {
       </div>
 
       {/* Info Panel */}
-      <div className="w-64 bg-[#202020] border-l border-gray-800 p-4">
-        <h2 className="font-semibold mb-4">Documents (18 items)</h2>
-        <p className="text-sm text-gray-400">
-          Select a single file to get more information and share your cloud
-          content.
-        </p>
-      </div>
+      <InfoPanel />
     </div>
   );
 }
