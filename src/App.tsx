@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { FileExplorer } from './components/FileExplorer';
 import { UfyleLayout } from './components/layout';
 import { HomePage } from './pages/home-page';
+import { RecentPage } from './pages/recent-page';
 
 function App() {
   return (
@@ -41,8 +41,8 @@ function App() {
           element={<div>Starred</div>}
         />
         <Route
-          path="/recents"
-          element={<FileExplorer />}
+          path="/recent"
+          element={<RecentPage />}
         />
         <Route
           path="/shared"

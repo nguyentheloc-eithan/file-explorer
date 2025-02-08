@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter, cleanActiveKey } from '@/lib/utils';
 import {
   ChevronDown,
   ChevronRight,
@@ -11,8 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { InfoPanel } from './InfoPanel';
-import { Sidebar } from './Sidebar';
-import { capitalizeFirstLetter, cleanActiveKey } from '@/lib/utils';
+import { Sidebar } from './sidebar';
 
 export function UfyleLayout() {
   const [searchParams] = useSearchParams();
@@ -51,7 +51,7 @@ export function UfyleLayout() {
                 placeholder={`Search at ${capitalizeFirstLetter(
                   selectedItemKey
                 )}`}
-                className="w-full bg-[#2c2c2c] border border-gray-700 rounded px-8 py-1 text-sm focus:outline-none focus:border-gray-600"
+                className="w-full bg-[#2c2c2c] border border-gray-700 rounded px-8 py-1 text-[13px] focus:outline-none focus:border-gray-600"
               />
             </div>
           </div>
@@ -61,32 +61,32 @@ export function UfyleLayout() {
 
         <div className="bg-[#1c1c1c] border-b border-gray-800 flex items-center h-12 px-2 gap-2">
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700">
+            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-700">
               <Plus size={16} />
               New
             </button>
             <div className="w-px h-4 mx-1 bg-gray-700" />
 
             <button
-              className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700"
+              className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-700"
               title="Copy">
-              Copy <Copy size={14} />
+              <Copy size={14} />
             </button>
 
             <div className="w-px h-4 mx-1 bg-gray-700" />
             <button
-              className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700"
+              className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-700"
               title="Delete">
-              Delete <Trash size={16} />
+              <Trash size={16} />
             </button>
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
+            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded hover:bg-gray-700">
               Sort
               <ChevronDown size={16} />
             </button>
-            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
+            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded hover:bg-gray-700">
               View
               <ChevronDown size={16} />
             </button>
@@ -98,7 +98,9 @@ export function UfyleLayout() {
             </button>
           </div>
         </div>
-        <Outlet />
+        <div className="h-screen flex flex-col bg-[#202020] text-gray-200 overflow-y-auto">
+          <Outlet />
+        </div>
       </div>
 
       {/* Info Panel */}

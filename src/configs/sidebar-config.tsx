@@ -26,8 +26,8 @@ export const sidebarConfig: SidebarItemType[] = [
   },
   {
     icon: <FileClock size={16} />,
-    label: 'Recents',
-    key: 'recents',
+    label: 'Recent',
+    key: 'recent',
   },
   {
     icon: <Star size={16} />,

@@ -1,9 +1,11 @@
 'use client';
 
+import { useFileActions } from '@/hooks/useFileActions';
 import { IFileBase } from '@/types/file.type';
 import {
   ChevronRight,
   Copy,
+  DownloadIcon,
   FileEdit,
   Files,
   MonitorPlay,
@@ -13,7 +15,7 @@ import {
   Star,
   Trash,
 } from 'lucide-react';
-import type React from 'react'; // Added import for React
+import type React from 'react';
 import { useEffect } from 'react';
 
 interface ContextMenuProps {
@@ -24,161 +26,150 @@ interface ContextMenuProps {
 }
 
 export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
-  console.log('row selected: ', selectedFile);
+  const { handleDownload, handleDelete } = useFileActions();
+
   useEffect(() => {
     const handleClick = () => onClose();
     window.addEventListener('click', handleClick);
     return () => window.removeEventListener('click', handleClick);
   }, [onClose]);
 
+  const handleMenuItemClick = async (key: string) => {
+    if (!selectedFile) {
+      return;
+    }
+    switch (key) {
+      case 'delete':
+        await handleDelete(selectedFile.id?.split(':')[1]);
+        break;
+      case 'download':
+        await handleDownload(selectedFile);
+        break;
+    }
+    onClose();
+  };
+
   return (
-    <div
-      className="fixed z-50 w-64 bg-[#2c2c2c] border border-gray-700 rounded-lg shadow-lg text-gray-200 text-sm"
-      style={{
-        top: y,
-        left: x,
-      }}
-      onClick={(e) => e.stopPropagation()}>
-      {/* Top toolbar */}
-      <div className="flex items-center justify-between px-2 py-1 border-b border-gray-700">
-        <button
-          className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
-          title="Cut">
-          <Scissors
-            size={16}
-            className="text-blue-400"
+    <>
+      <div
+        className="fixed z-50 w-64 bg-[#2c2c2c] border border-gray-700 rounded-lg shadow-lg text-gray-200 text-[13px]"
+        style={{
+          top: y,
+          left: x,
+        }}
+        onClick={(e) => e.stopPropagation()}>
+        {/* Top toolbar */}
+        <div className="flex items-center justify-between px-2 py-1 border-b border-gray-700">
+          <button
+            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            title="Cut"
+            onClick={() => handleMenuItemClick('cut')}>
+            <Scissors
+              size={16}
+              className="text-blue-400"
+            />
+            Move
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            title="Copy"
+            onClick={() => handleMenuItemClick('copy')}>
+            <Copy
+              size={16}
+              className="text-blue-400"
+            />
+            Copy
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            title="Rename"
+            onClick={() => handleMenuItemClick('rename')}>
+            <FileEdit
+              size={16}
+              className="text-blue-400"
+            />
+            Rename
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            title="Share"
+            onClick={() => handleMenuItemClick('share')}>
+            <Share
+              size={16}
+              className="text-blue-400"
+            />
+            Share
+          </button>
+          <button
+            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            title="Delete"
+            onClick={() => handleMenuItemClick('delete')}>
+            <Trash
+              size={16}
+              className="text-blue-400"
+            />
+            Delete
+          </button>
+        </div>
+
+        {/* Menu items */}
+        <div className="py-1">
+          <MenuItem
+            icon={
+              <MonitorPlay
+                size={16}
+                className="text-blue-400"
+              />
+            }
+            label="Open"
+            shortcut="Enter"
+            onClick={() => handleMenuItemClick('open')}
           />
-          Move
-        </button>
-        <button
-          className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
-          title="Copy">
-          <Copy
-            size={16}
-            className="text-blue-400"
+          <MenuItem
+            icon={
+              <DownloadIcon
+                size={16}
+                className="text-blue-400"
+              />
+            }
+            label="Download"
+            onClick={() => handleMenuItemClick('download')}
           />
-          Copy
-        </button>
-        <button
-          className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
-          title="Rename">
-          <FileEdit
-            size={16}
-            className="text-blue-400"
+          <MenuItem
+            icon={
+              <Files
+                size={16}
+                className="text-blue-400"
+              />
+            }
+            label="Copy as path"
+            onClick={() => handleMenuItemClick('copy-path')}
           />
-          Rename
-        </button>
-        <button
-          className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
-          title="Share">
-          <Share
-            size={16}
-            className="text-blue-400"
+          <MenuItem
+            icon={
+              <Star
+                size={16}
+                className="text-blue-400"
+              />
+            }
+            label="Add to Favorites"
+            onClick={() => handleMenuItemClick('favorite')}
           />
-          Share
-        </button>
-        <button
-          className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
-          title="Delete">
-          <Trash
-            size={16}
-            className="text-blue-400"
+          <MenuItem
+            icon={
+              <Pin
+                size={16}
+                className="text-blue-400"
+              />
+            }
+            label="Pin to quick access"
+            onClick={() => handleMenuItemClick('pin')}
           />
-          Delete
-        </button>
+        </div>
       </div>
 
-      {/* Menu items */}
-      <div className="py-1">
-        <MenuItem
-          icon={
-            <MonitorPlay
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Open"
-          shortcut="Enter"
-        />
-        {/* <MenuItem
-          icon={
-            <MonitorPlay
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Open with"
-          hasSubmenu
-        /> */}
-
-        <MenuItem
-          icon={
-            <Star
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Add to Favorites"
-        />
-        <MenuItem
-          icon={
-            <Pin
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Pin to quick access"
-        />
-        <MenuItem
-          icon={
-            <Files
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Copy as path"
-          //   shortcut="Ctrl+Shift+C"
-        />
-        {/* <MenuItem
-          icon={
-            <Settings
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Properties"
-          shortcut="Alt+Enter"
-        /> */}
-        {/* <MenuItem
-          icon={
-            <FileCode
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Edit in Notepad"
-        /> */}
-        {/* <MenuItem
-          icon={
-            <Archive
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="WinRAR"
-          hasSubmenu
-        /> */}
-        {/* <MenuItem
-          icon={
-            <MoreHorizontal
-              size={16}
-              className="text-blue-400"
-            />
-          }
-          label="Show more options"
-        /> */}
-      </div>
-    </div>
+      {/* Confirmation Dialog */}
+    </>
   );
 }
 

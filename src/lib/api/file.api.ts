@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { formatFileData, handleApiError } from '../utils';
-import { IFileBase } from '@/types/file.type';
+import { FileMeta, IFileBase } from '@/types/file.type';
 import { IBaseApiParams } from '@/types/api.base.type';
 
 interface IGetStatsParams {
@@ -45,10 +45,10 @@ export const getStats = async ({
 
     const [dataRecentFile, dataTop50File] = await Promise.all([
       axios.get(
-        `${serverApiUrl}/ufyle/search?q=${formatRecent?.searchString}&limit=10`
+        `${serverApiUrl}/ufyle/search?q=${formatRecent?.searchString}&limit=100`
       ),
       axios.get(
-        `${serverApiUrl}/ufyle/search?q=${formattedTop50?.searchString}&limit=10`
+        `${serverApiUrl}/ufyle/search?q=${formattedTop50?.searchString}&limit=100`
       ),
     ]);
 
@@ -176,4 +176,25 @@ export const renameFile = async ({
 
   const result = await handleApiError(response);
   return result;
+};
+
+export const downloadFile = async (
+  serverApiUrl: string,
+  partitionId: string,
+  selectedFile: IFileBase | FileMeta
+) => {
+  try {
+    const urlDownload = `${serverApiUrl}/ufyle/partition/${partitionId}/file/${
+      selectedFile?.id?.split(':')[1]
+    }`;
+
+    const a = document.createElement('a');
+    a.href = urlDownload;
+    a.download = selectedFile?.name || 'download';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (error) {
+    console.error('Error downloading file:', error);
+  }
 };

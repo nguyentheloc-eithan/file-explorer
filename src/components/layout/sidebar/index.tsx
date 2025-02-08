@@ -47,7 +47,7 @@ export function Sidebar() {
         <button
           onClick={(event) => handleClick(event, item)}
           className={cn(
-            'flex items-center gap-2 w-full px-2 py-1 text-sm rounded hover:bg-gray-800',
+            'flex items-center gap-2 w-full px-2 py-1 text-[13px] rounded hover:bg-gray-800',
             isActive && 'bg-gray-700',
             indent > 0 && 'ml-4'
           )}>

@@ -37,13 +37,14 @@ export function HomePage() {
       file,
     });
   };
+
   return (
-    <div className="h-screen flex flex-col bg-[#202020] text-gray-200 overflow-y-auto">
+    <div>
       {/* Quick Access Section */}
       <div className="flex-1 p-4 overflow-auto">
         <div className="space-y-6">
           <section>
-            <h2 className="mb-3 text-sm font-semibold">Quick Access</h2>
+            <h2 className="mb-3 text-[13px] font-semibold">Quick Access</h2>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               {quickAccessItems.map((item) => (
                 <QuickAccessItem
@@ -57,7 +58,7 @@ export function HomePage() {
           </section>
 
           <section>
-            <h2 className="mb-3 text-sm font-semibold">Recent Files</h2>
+            <h2 className="mb-3 text-[13px] font-semibold">Recent Files</h2>
             <div className="space-y-1">
               {recentFilesData?.map((file: IFileBase) => (
                 <div
@@ -70,7 +71,7 @@ export function HomePage() {
                   onClick={() => setSelectedFile(file)}>
                   <File size={16} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm truncate">{file.name}</div>
+                    <div className="text-[13px] truncate">{file.name}</div>
                     <div className="text-xs text-gray-400">{file.alias}</div>
                   </div>
                   <div className="text-xs text-gray-400">
@@ -108,7 +109,7 @@ function QuickAccessItem({
     <div className="flex items-center gap-3 p-3 border border-gray-800 rounded cursor-pointer hover:bg-gray-800">
       <div className="text-blue-400">{icon}</div>
       <div className="flex-1 min-w-0">
-        <div className="text-sm font-medium truncate">{name}</div>
+        <div className="text-[13px] font-medium truncate">{name}</div>
         <div className="text-xs text-gray-400 truncate">{alias}</div>
       </div>
     </div>
