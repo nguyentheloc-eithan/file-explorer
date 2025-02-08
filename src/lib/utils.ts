@@ -54,3 +54,12 @@ export const formatters = {
       .map((dir) => dir.replace('dir:', ''));
   },
 };
+export const cleanActiveKey = (key: string | null): string => {
+  if (key) {
+    return key.replace(/[-_]/g, '');
+  }
+  return '';
+};
+export const capitalizeFirstLetter = (val: string) => {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+};

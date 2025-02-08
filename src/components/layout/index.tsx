@@ -12,21 +12,15 @@ import { useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { InfoPanel } from './InfoPanel';
 import { Sidebar } from './Sidebar';
+import { capitalizeFirstLetter, cleanActiveKey } from '@/lib/utils';
 
 export function UfyleLayout() {
   const [searchParams] = useSearchParams();
   const [selectedItemKey, setSelectedItemKey] = useState<string>('');
 
-  const cleanKey = (key: string | null): string => {
-    if (key) {
-      return key.replace(/[-_]/g, '');
-    }
-    return '';
-  };
-
   useEffect(() => {
     const activeKey = searchParams.get('ak');
-    const cleanedKey = cleanKey(activeKey);
+    const cleanedKey = cleanActiveKey(activeKey);
     setSelectedItemKey(cleanedKey);
   }, [searchParams]);
 
@@ -54,7 +48,9 @@ export function UfyleLayout() {
               />
               <input
                 type="text"
-                placeholder={`Search ${selectedItemKey}`}
+                placeholder={`Search at ${capitalizeFirstLetter(
+                  selectedItemKey
+                )}`}
                 className="w-full bg-[#2c2c2c] border border-gray-700 rounded px-8 py-1 text-sm focus:outline-none focus:border-gray-600"
               />
             </div>

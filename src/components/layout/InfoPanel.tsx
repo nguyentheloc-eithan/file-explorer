@@ -1,14 +1,24 @@
 import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
 import { useFileStore } from '@/core/states/file.state';
-import { formatters } from '@/lib/utils';
+import { capitalizeFirstLetter, cleanActiveKey, formatters } from '@/lib/utils';
 import { FileMeta } from '@/types/file.type';
 import dayjs from 'dayjs';
 import { Edit, FileText, Settings, Share } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 export const InfoPanel = () => {
+  const [searchParams] = useSearchParams();
+  const [selectedItemKey, setSelectedItemKey] = useState<string>('');
+
   const { selectedFile } = useFileStore();
   const [selectedFileMeta, setSelectedFileMeta] = useState<FileMeta | null>();
+
+  useEffect(() => {
+    const activeKey = searchParams.get('ak');
+    const cleanedKey = cleanActiveKey(activeKey);
+    setSelectedItemKey(cleanedKey);
+  }, [searchParams]);
 
   useEffect(() => {
     const getFileMeta = async () => {
@@ -123,7 +133,9 @@ export const InfoPanel = () => {
         </>
       ) : (
         <div className="p-4">
-          <h2 className="mb-4 font-semibold">Documents (18 items)</h2>
+          <h2 className="mb-4 font-semibold">
+            {capitalizeFirstLetter(selectedItemKey)}
+          </h2>
           <p className="text-sm text-gray-400">
             Select a single file to get more information and share your cloud
             content.

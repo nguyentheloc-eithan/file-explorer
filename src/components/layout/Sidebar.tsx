@@ -3,11 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { sidebarConfig, SidebarItemType } from '@/configs/sidebar-config';
+import { useFileStore } from '@/core/states/file.state';
 
 export function Sidebar() {
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { setSelectedFile } = useFileStore();
 
   const toggleExpand = (item: SidebarItemType) => {
     if (item.children) {
@@ -34,6 +36,7 @@ export function Sidebar() {
       }
 
       if (item.key) {
+        setSelectedFile(null);
         const keyActivestring = `ak=${item.key}`;
         navigate(`/${item.key}?${keyActivestring}`);
       }
