@@ -1,12 +1,10 @@
 import {
   ChevronDown,
   ChevronRight,
-  Clipboard,
   Copy,
   LayoutList,
   Plus,
   RotateCcw,
-  Scissors,
   Search,
   Trash,
 } from 'lucide-react';
@@ -67,31 +65,23 @@ export function UfyleLayout() {
 
         <div className="bg-[#1c1c1c] border-b border-gray-800 flex items-center h-12 px-2 gap-2">
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded hover:bg-gray-700">
+            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700">
               <Plus size={16} />
               New
             </button>
             <div className="w-px h-4 mx-1 bg-gray-700" />
+
             <button
-              className="p-2 rounded hover:bg-gray-700"
-              title="Cut">
-              <Scissors size={16} />
-            </button>
-            <button
-              className="p-2 rounded hover:bg-gray-700"
+              className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700"
               title="Copy">
-              <Copy size={16} />
+              Copy <Copy size={14} />
             </button>
-            <button
-              className="p-2 rounded hover:bg-gray-700"
-              title="Paste">
-              <Clipboard size={16} />
-            </button>
+
             <div className="w-px h-4 mx-1 bg-gray-700" />
             <button
-              className="p-2 rounded hover:bg-gray-700"
+              className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-700"
               title="Delete">
-              <Trash size={16} />
+              Delete <Trash size={16} />
             </button>
           </div>
           <div className="flex-1" />

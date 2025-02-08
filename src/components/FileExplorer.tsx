@@ -6,7 +6,7 @@ export function FileExplorer() {
   return (
     <div className="h-screen flex bg-[#202020] text-gray-200">
       {/* Main content area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-col flex-1">
         <>
           <div className="flex-1 overflow-hidden">
             <div className="grid grid-cols-[1fr_200px_150px_100px] gap-1 p-2 text-sm border-b border-gray-800">
@@ -45,66 +45,6 @@ export function FileExplorer() {
 }
 
 const files = [
-  {
-    name: 'dj',
-    dateModified: '06/02/2025 10:17 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'League of Legends',
-    dateModified: '27/07/2024 9:57 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'projects',
-    dateModified: '07/02/2025 9:51 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'references',
-    dateModified: '05/02/2025 8:51 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'schooling',
-    dateModified: '13/11/2024 10:36 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'ufyle',
-    dateModified: '07/02/2025 10:19 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'ufyle (1)',
-    dateModified: '07/02/2025 10:19 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'WindowsPowerShell',
-    dateModified: '07/12/2024 12:04 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'Zalo Received Files',
-    dateModified: '12/03/2024 3:01 pm',
-    type: 'File folder',
-    size: '',
-  },
-  {
-    name: 'Zoom',
-    dateModified: '09/05/2024 9:34 am',
-    type: 'File folder',
-    size: '',
-  },
   {
     name: '+note',
     dateModified: '19/01/2024 9:16 am',
@@ -148,7 +88,7 @@ const files = [
     size: '1 KB',
   },
   {
-    name: 'ufyle (1)',
+    name: 'name file',
     dateModified: '07/02/2025 10:18 pm',
     type: 'ZIP File',
     size: '6,014 KB',

@@ -1,6 +1,8 @@
 'use client';
 
+import { useFileStore } from '@/core/states/file.state';
 import { cn } from '@/lib/utils';
+import { IFileBase } from '@/types/file.type';
 import {
   Archive,
   File,
@@ -12,14 +14,29 @@ import {
   Users,
   Video,
 } from 'lucide-react';
-import { useState } from 'react';
 import { useHome } from './hook';
-import { IFileBase } from '@/types/file.type';
+import { ContextMenuState } from '@/types/context-menu.type';
+import { useState } from 'react';
+import { ContextMenu } from '@/components/context-menu';
 
 export function HomePage() {
   const { recentFilesData } = useHome();
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const { selectedFile, setSelectedFile } = useFileStore();
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>({
+    show: false,
+    x: 0,
+    y: 0,
+  });
 
+  const handleContextMenu = (e: React.MouseEvent, file: IFileBase) => {
+    e.preventDefault();
+    setContextMenu({
+      show: true,
+      x: e.clientX,
+      y: e.clientY,
+      file,
+    });
+  };
   return (
     <div className="h-screen flex flex-col bg-[#202020] text-gray-200 overflow-y-auto">
       {/* Quick Access Section */}
@@ -45,11 +62,12 @@ export function HomePage() {
               {recentFilesData?.map((file: IFileBase) => (
                 <div
                   key={file.id}
+                  onContextMenu={(e) => handleContextMenu(e, file)}
                   className={cn(
                     'flex items-center gap-3 p-2 rounded hover:bg-gray-800 cursor-pointer',
-                    selectedItem === file.id && 'bg-gray-700'
+                    selectedFile?.id === file.id && 'bg-gray-700'
                   )}
-                  onClick={() => setSelectedItem(file.id)}>
+                  onClick={() => setSelectedFile(file)}>
                   <File size={16} />
                   <div className="flex-1 min-w-0">
                     <div className="text-sm truncate">{file.name}</div>
@@ -64,6 +82,15 @@ export function HomePage() {
           </section>
         </div>
       </div>
+      {/* Context Menu */}
+      {contextMenu.show && (
+        <ContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          selectedFile={contextMenu.file}
+          onClose={() => setContextMenu({ show: false, x: 0, y: 0 })}
+        />
+      )}
     </div>
   );
 }

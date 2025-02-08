@@ -22,7 +22,6 @@ export const getStats = async ({
   partitionId,
 }: IGetStatsParams) => {
   const fetchURL = `${serverApiUrl}/ufyle/partition/${partitionId}/stats`;
-  console.log('Fetching stats from:', fetchURL);
 
   const response = await axios.get(fetchURL);
   const { data } = response;
