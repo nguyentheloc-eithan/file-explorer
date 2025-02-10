@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type React from 'react';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 interface ContextMenuProps {
   x: number;
@@ -45,6 +46,8 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
       case 'download':
         await handleDownload(selectedFile);
         break;
+      default:
+        toast.info('This function is still developing');
     }
     onClose();
   };

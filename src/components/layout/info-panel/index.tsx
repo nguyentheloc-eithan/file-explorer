@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from 'react';
-import { FileIcon } from 'lucide-react';
-import { FileActions } from './FileActions';
-import { FileDetails } from './FileDetails';
-import { capitalizeFirstLetter, cleanActiveKey } from '@/lib/utils';
-import { FileMeta } from '@/types/file.type';
-import { useFileMeta } from './hook';
-import { toast } from 'react-toastify';
 import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
-import { useSearchParams } from 'react-router-dom';
 import { useFileStore } from '@/core/states/file.state';
 import { refreshHandler, useTriggerRefresh } from '@/core/states/refresh.state';
 import { downloadFile } from '@/lib/api/file.api';
+import { capitalizeFirstLetter, cleanActiveKey } from '@/lib/utils';
+import { FileMeta } from '@/types/file.type';
+import { FileIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { FileActions } from './FileActions';
+import { FileDetails } from './FileDetails';
+import { useFileMeta } from './hook';
 
 export const InfoPanelV2 = () => {
   const [searchParams] = useSearchParams();
@@ -20,7 +20,6 @@ export const InfoPanelV2 = () => {
   const { selectedFile } = useFileStore();
   const { setRefreshRecent, setRefreshHome } = useTriggerRefresh();
   const activeKey = searchParams.get('ak');
-  const [isLightTheme, setIsLightTheme] = useState(false);
 
   const {
     selectedFileMeta,
@@ -36,18 +35,6 @@ export const InfoPanelV2 = () => {
   useEffect(() => {
     const cleanedKey = cleanActiveKey(activeKey);
     setSelectedItemKey(cleanedKey);
-
-    // Detect system theme
-    const checkTheme = window.matchMedia('(prefers-color-scheme: light)');
-    setIsLightTheme(checkTheme.matches);
-
-    // Listen for changes
-    const handleThemeChange = (event: MediaQueryListEvent) => {
-      setIsLightTheme(event.matches);
-    };
-
-    checkTheme.addEventListener('change', handleThemeChange);
-    return () => checkTheme.removeEventListener('change', handleThemeChange);
   }, [activeKey, searchParams]);
 
   const handleInputChange = (field: keyof FileMeta, value: string) => {
@@ -147,10 +134,7 @@ export const InfoPanelV2 = () => {
 
   if (!selectedFile) {
     return (
-      <div
-        className={`p-4 w-80 ${
-          isLightTheme ? 'bg-white text-black' : 'bg-white text-black'
-        }`}>
+      <div className={`p-4 w-80 border-gray-300 ${'bg-white text-black'}`}>
         <h2 className="mb-4 font-semibold">
           {capitalizeFirstLetter(selectedItemKey)}
         </h2>
