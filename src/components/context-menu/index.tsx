@@ -1,5 +1,6 @@
 'use client';
 
+import { useFileStore } from '@/core/states/file.state';
 import { refreshHandler } from '@/core/states/refresh.state';
 import { useFileActions } from '@/hooks/useFileActions';
 import { IFileBase } from '@/types/file.type';
@@ -31,6 +32,7 @@ interface ContextMenuProps {
 export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
   const [searchParams] = useSearchParams();
   const activeKey = searchParams.get('ak');
+  const { setTargetFileRename } = useFileStore();
   const { handleDownload, handleDelete, copyFile, moveFile } = useFileActions();
 
   useEffect(() => {
@@ -88,7 +90,9 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
           }
         }
         break;
-
+      case 'rename':
+        setTargetFileRename(selectedFile);
+        break;
       default:
         toast.info('This function is still developing');
     }

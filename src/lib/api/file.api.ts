@@ -157,7 +157,7 @@ export const editFileMeta = async () => {};
 export const getFileMeta = async () => {};
 interface IRenameFileParams extends IBaseApiParams {
   values: any;
-  fileId: IFileBase;
+  fileId: string;
 }
 
 export const renameFile = async ({

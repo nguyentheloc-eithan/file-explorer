@@ -3,6 +3,7 @@ import { UfyleLayout } from './components/layout';
 import { HomePage } from './pages/home-page';
 import { RecentPage } from './pages/recent-page';
 import TopFilesPage from './pages/top-files-page';
+import NotFoundPage from './pages/not-found-page';
 
 function App() {
   return (
@@ -42,6 +43,12 @@ function App() {
           element={<div>Trash</div>}
         />
       </Route>
+
+      {/* Catch-all route for 404 */}
+      <Route
+        path="*"
+        element={<NotFoundPage />}
+      />
     </Routes>
   );
 }
