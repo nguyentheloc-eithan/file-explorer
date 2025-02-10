@@ -1,23 +1,14 @@
 'use client';
 
+import { ContextMenu } from '@/components/context-menu';
 import { useFileStore } from '@/core/states/file.state';
 import { cn } from '@/lib/utils';
-import { IFileBase } from '@/types/file.type';
-import {
-  Archive,
-  File,
-  FileText,
-  Folder,
-  Music,
-  Star,
-  Trash2,
-  Users,
-  Video,
-} from 'lucide-react';
-import { useHome } from './hook';
 import { ContextMenuState } from '@/types/context-menu.type';
+import { IFileBase } from '@/types/file.type';
+import { File, Folder, Star, Trash2, Users } from 'lucide-react';
 import { useState } from 'react';
-import { ContextMenu } from '@/components/context-menu';
+import { useNavigate } from 'react-router-dom';
+import { useHome } from './hook';
 
 export function HomePage() {
   const { recentFilesData } = useHome();
@@ -39,50 +30,57 @@ export function HomePage() {
   };
 
   return (
-    <div>
+    <div className="bg-[#F8F9FA] text-gray-800 h-full p-4 overflow-auto">
       {/* Quick Access Section */}
-      <div className="flex-1 p-4 overflow-auto">
-        <div className="space-y-6">
-          <section>
-            <h2 className="mb-3 text-[13px] font-semibold">Quick Access</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-              {quickAccessItems.map((item) => (
-                <QuickAccessItem
-                  key={item.name}
-                  icon={item.icon}
-                  name={item.name}
-                  alias={item.alias}
-                />
-              ))}
-            </div>
-          </section>
+      <div className="space-y-6">
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-gray-700">
+            Quick Access
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {quickAccessItems.map((item) => (
+              <QuickAccessItem
+                navLink={item.navLink}
+                key={item.name}
+                icon={item.icon}
+                name={item.name}
+                alias={item.alias}
+              />
+            ))}
+          </div>
+        </section>
 
-          <section>
-            <h2 className="mb-3 text-[13px] font-semibold">Recent Files</h2>
-            <div className="space-y-1">
-              {recentFilesData?.map((file: IFileBase) => (
-                <div
-                  key={file.id}
-                  onContextMenu={(e) => handleContextMenu(e, file)}
-                  className={cn(
-                    'flex items-center gap-3 p-2 rounded hover:bg-gray-800 cursor-pointer',
-                    selectedFile?.id === file.id && 'bg-gray-700'
-                  )}
-                  onClick={() => setSelectedFile(file)}>
-                  <File size={16} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] truncate">{file.name}</div>
-                    <div className="text-xs text-gray-400">{file.alias}</div>
-                  </div>
-                  <div className="text-xs text-gray-400">
-                    {file?.mtime ? file?.mtime : '05/02/2025 8:51 pm'}
-                  </div>
+        <section>
+          <h2 className="mb-3 text-sm font-semibold text-gray-700">
+            Recent Files
+          </h2>
+          <div className="space-y-1">
+            {recentFilesData?.map((file: IFileBase) => (
+              <div
+                key={file.id}
+                onContextMenu={(e) => handleContextMenu(e, file)}
+                className={cn(
+                  'flex items-center gap-3 p-2 rounded-lg hover:bg-gray-200 cursor-pointer transition',
+                  selectedFile?.id === file.id && 'bg-gray-300'
+                )}
+                onClick={() => setSelectedFile(file)}>
+                <File
+                  size={16}
+                  className="text-gray-600"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm truncate">{file.name}</div>
+                  <div className="text-xs text-gray-500">{file.alias}</div>
                 </div>
-              ))}
-            </div>
-          </section>
-        </div>
+                <div className="text-xs text-gray-500">
+                  {file?.mtime ? file?.mtime : '05/02/2025 8:51 pm'}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
+
       {/* Context Menu */}
       {contextMenu.show && (
         <ContextMenu
@@ -100,33 +98,52 @@ function QuickAccessItem({
   icon,
   name,
   alias,
+  navLink,
 }: {
   icon: React.ReactNode;
   name: string;
   alias: string;
+  navLink: string;
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="flex items-center gap-3 p-3 border border-gray-800 rounded cursor-pointer hover:bg-gray-800">
-      <div className="text-blue-400">{icon}</div>
+    <div
+      onClick={() => {
+        navigate(navLink);
+      }}
+      className="flex items-center gap-3 p-3 transition bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100">
+      <div className="text-blue-500">{icon}</div>
       <div className="flex-1 min-w-0">
-        <div className="text-[13px] font-medium truncate">{name}</div>
-        <div className="text-xs text-gray-400 truncate">{alias}</div>
+        <div className="text-sm font-medium truncate">{name}</div>
+        <div className="text-xs text-gray-500 truncate">{alias}</div>
       </div>
     </div>
   );
 }
 
 const quickAccessItems = [
-  { icon: <Folder size={20} />, name: 'Top Files', alias: 'Frequently Used' },
-  { icon: <Star size={20} />, name: 'Starred', alias: 'Favorite Items' },
   {
-    icon: <FileText size={20} />,
-    name: 'Documents',
-    alias: 'Text Files & PDFs',
+    icon: <Folder size={20} />,
+    name: 'Top Files',
+    alias: 'Frequently Used',
+    navLink: '/top-files',
   },
-  { icon: <Users size={20} />, name: 'Shared', alias: 'Shared Files' },
-  { icon: <Music size={20} />, name: 'Music', alias: 'Audio Files' },
-  { icon: <Video size={20} />, name: 'Videos', alias: 'Movie & Clips' },
-  { icon: <Trash2 size={20} />, name: 'Trash', alias: 'Deleted Files' },
-  { icon: <Archive size={20} />, name: 'References', alias: 'Project Files' },
+  {
+    icon: <Star size={20} />,
+    name: 'Starred',
+    alias: 'Favorite Items',
+    navLink: '/starred',
+  },
+  {
+    icon: <Users size={20} />,
+    name: 'Shared',
+    alias: 'Shared Files',
+    navLink: '/shared',
+  },
+  {
+    icon: <Trash2 size={20} />,
+    name: 'Trash',
+    alias: 'Deleted Files',
+    navLink: '/trash',
+  },
 ];

@@ -47,8 +47,8 @@ export function Sidebar() {
         <button
           onClick={(event) => handleClick(event, item)}
           className={cn(
-            'flex items-center gap-2 w-full px-2 py-1 text-[13px] rounded hover:bg-gray-800',
-            isActive && 'bg-gray-700',
+            'flex items-center gap-2 w-full px-3 py-2 text-[14px] rounded hover:bg-gray-200 transition',
+            isActive && 'bg-blue-100',
             indent > 0 && 'ml-4'
           )}>
           {hasChildren && (
@@ -73,8 +73,8 @@ export function Sidebar() {
   };
 
   return (
-    <div className="w-48 bg-[#202020] border-r border-gray-800">
-      <nav className="p-2 space-y-1">
+    <div className="bg-white border-r border-gray-300 shadow-sm w-60">
+      <nav className="p-3 space-y-1">
         {sidebarConfig.map((item) => renderSidebarItem(item))}
       </nav>
     </div>

@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { UfyleLayout } from './components/layout';
 import { HomePage } from './pages/home-page';
 import { RecentPage } from './pages/recent-page';
+import TopFilesPage from './pages/top-files-page';
 
 function App() {
   return (
@@ -21,20 +22,8 @@ function App() {
           element={<HomePage />}
         />
         <Route
-          path="/documents"
-          element={<div>Documents</div>}
-        />
-        <Route
-          path="/pictures"
-          element={<div>Pictures</div>}
-        />
-        <Route
-          path="/music"
-          element={<div>Music</div>}
-        />
-        <Route
-          path="/videos"
-          element={<div>Videos</div>}
+          path="/top-files"
+          element={<TopFilesPage />}
         />
         <Route
           path="/starred"

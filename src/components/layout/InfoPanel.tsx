@@ -17,7 +17,9 @@ export const InfoPanel = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { selectedFile } = useFileStore();
   const [selectedFileMeta, setSelectedFileMeta] = useState<FileMeta | null>();
-  const [editedValues, setEditedValues] = useState<Partial<FileMeta>>({});
+  const [editedValues, setEditedValues] = useState<{
+    [K in keyof FileMeta]?: string | number | string[];
+  }>({});
   const [editedTags, setEditedTags] = useState<string>('');
   const activeKey = searchParams.get('ak');
   const { setRefreshRecent, setRefreshHome } = useTriggerRefresh();
@@ -32,6 +34,7 @@ export const InfoPanel = () => {
     setIsEditing(false);
   }, [selectedFile]);
 
+  console.log('selectedFileMeta', selectedFileMeta);
   useEffect(() => {
     const getFileMeta = async () => {
       if (!selectedFile?.id) return;
@@ -143,9 +146,9 @@ export const InfoPanel = () => {
       setIsEditing(false);
     }
   };
-
   const handleInputChange = (field: keyof FileMeta, value: string) => {
-    setEditedValues((prev) => ({ ...prev, [field]: value }));
+    const newVal = { ...editedValues, [field]: value };
+    setEditedValues(newVal);
   };
 
   const handleDownload = async () => {
@@ -191,11 +194,8 @@ export const InfoPanel = () => {
         ) : (
           <input
             type="text"
-            value={editedValues[field] || ''}
-            onChange={(e) => {
-              e.target.focus(); // Ensure input maintains focus
-              handleInputChange(field, e.target.value);
-            }}
+            defaultValue={editedValues[field]?.toString() || ''}
+            onChange={(e) => handleInputChange(field, e.target.value)}
             className="bg-[#333] px-2 py-1 rounded text-white text-[13px] focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         )
@@ -272,11 +272,21 @@ export const InfoPanel = () => {
             <div className="mt-8">
               <h3 className="mb-4 font-semibold">Details</h3>
               <div className="space-y-2 text-[13px]">
-                <DetailField
-                  label="Alias"
-                  value={selectedFileMeta?.alias || selectedFile.alias}
-                  field="alias"
-                />
+                <div className="grid items-center grid-cols-2 gap-2">
+                  <span className="text-gray-400">{'Alias'}</span>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      defaultValue={selectedFileMeta?.alias}
+                      onChange={(e) =>
+                        handleInputChange('alias', e.target.value)
+                      }
+                      className="bg-[#333] px-2 py-1 rounded text-white text-[13px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  ) : (
+                    <span>{selectedFileMeta?.alias}</span>
+                  )}
+                </div>
                 {selectedFileMeta && (
                   <>
                     <DetailField
