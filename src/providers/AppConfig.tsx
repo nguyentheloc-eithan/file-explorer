@@ -1,4 +1,6 @@
-import { backend_url } from '@/configs/app-config';
+import { partitionId } from '@/constants/partition-id';
+import { getDirs, getTags } from '@/lib/api/refs.api';
+import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface Config {
@@ -10,6 +12,8 @@ interface ConfigContextType {
   saveConfig: (config: Config) => void;
   loadConfig: () => void;
   isLoadingConfig: boolean;
+  partitionTags: string[];
+  partitionDirs: string[];
 }
 
 const generateHash = (data: string): string => {
@@ -36,6 +40,8 @@ export const ConfigAppContext = createContext<ConfigContextType>({
   saveConfig: () => {},
   loadConfig: () => {},
   isLoadingConfig: true,
+  partitionTags: [],
+  partitionDirs: [],
 });
 
 interface ConfigAppProviderProps {
@@ -47,6 +53,8 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
 }) => {
   const [config, setConfigState] = useState<Config>({ serverApiUrl: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const [tags, setTags] = useState<string[]>([]);
+  const [dirs, setDirs] = useState<string[]>([]);
 
   const getBasePath = (): string => {
     const isLocalhost = /^localhost|127\.0\.0\.1|0\.0\.0\.0$/.test(
@@ -82,31 +90,43 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
     }
 
     try {
-      // const basePath = getBasePath();
-      // const response = await axios.get(`${basePath}/config`);
+      const basePath = getBasePath();
+      const response = await axios.get(`${basePath}/config`);
 
-      // let data;
-      // if (typeof response.data === 'string') {
-      //   // Parse the raw JSON string manually if it's not an object
-      //   data = JSON.parse(response.data);
-      // } else {
-      //   data = response.data;
-      // }
+      let data;
+      if (typeof response.data === 'string') {
+        // Parse the raw JSON string manually if it's not an object
+        data = JSON.parse(response.data);
+      } else {
+        data = response.data;
+      }
 
-      // if (data?.app_config?.endpoint) {
-      //   const newConfig: Config = { serverApiUrl: data.app_config.endpoint };
-      //   saveConfig(newConfig);
-      //   setConfigState(newConfig);
-      // } else {
-      //   console.error('Invalid response from backend');
-      // }
-      const newConfig: Config = { serverApiUrl: backend_url };
-      saveConfig(newConfig);
-      setConfigState(newConfig);
+      if (data?.app_config?.endpoint) {
+        const newConfig: Config = { serverApiUrl: data.app_config.endpoint };
+        saveConfig(newConfig);
+        setConfigState(newConfig);
+      } else {
+        console.error('Invalid response from backend');
+      }
     } catch (error) {
       console.error('Failed to fetch config:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const fetchTagsAndDirs = async (serverApiUrl: string) => {
+    try {
+      const [fetchedTags, fetchedDirs] = await Promise.all([
+        getTags({ partitionId, serverApiUrl }),
+        getDirs({ partitionId, serverApiUrl }),
+      ]);
+      const uniqueTags: string[] = Array.from(new Set(fetchedTags));
+      const uniqueDirs: string[] = Array.from(new Set(fetchedDirs));
+
+      setTags(uniqueTags);
+      setDirs(uniqueDirs);
+    } catch (error) {
+      console.error('Failed to fetch tags and dirs:', error);
     }
   };
 
@@ -116,6 +136,7 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
     setCookie('CONFIG_APP', rawConfig, 7);
     setCookie('CONFIG_APP_HASH', hash, 7);
     setConfigState(newConfig);
+    // fetchTagsAndDirs(newConfig.serverApiUrl);
   };
 
   useEffect(() => {
@@ -128,7 +149,14 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
 
   return (
     <ConfigAppContext.Provider
-      value={{ config, saveConfig, loadConfig, isLoadingConfig: isLoading }}>
+      value={{
+        config,
+        saveConfig,
+        loadConfig,
+        isLoadingConfig: isLoading,
+        partitionTags: tags,
+        partitionDirs: dirs,
+      }}>
       {children}
     </ConfigAppContext.Provider>
   );

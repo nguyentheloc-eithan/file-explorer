@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { backend_url } from '@/configs/app-config';
+
 import { partitionId } from '@/constants/partition-id';
 import { useFileStore } from '@/core/states/file.state';
 import { refreshHandler, useTriggerRefresh } from '@/core/states/refresh.state';
@@ -13,8 +13,10 @@ import { toast } from 'react-toastify';
 import { FileActions } from './FileActions';
 import { FileDetails } from './FileDetails';
 import { useFileMeta } from './hook';
+import { useConfigApp } from '@/providers/AppConfig';
 
 export const InfoPanelV2 = () => {
+  const { config } = useConfigApp();
   const [searchParams] = useSearchParams();
   const [selectedItemKey, setSelectedItemKey] = useState<string>('');
   const { selectedFile } = useFileStore();
@@ -73,7 +75,7 @@ export const InfoPanelV2 = () => {
         refs: [...currentRefs, ...newTags],
       };
 
-      const updateUrl = `${backend_url}/ufyle/partition/${partitionId}/file/${selectedFileMeta?.id}/meta`;
+      const updateUrl = `${config.serverApiUrl}/ufyle/partition/${partitionId}/file/${selectedFileMeta?.id}/meta`;
       const response = await fetch(updateUrl, {
         method: 'POST',
         headers: {
@@ -126,7 +128,7 @@ export const InfoPanelV2 = () => {
     }
 
     try {
-      await downloadFile(backend_url, partitionId, selectedFile);
+      await downloadFile(config.serverApiUrl, partitionId, selectedFile);
     } catch (error) {
       console.error('Error downloading file:', error);
     }
@@ -134,7 +136,8 @@ export const InfoPanelV2 = () => {
 
   if (!selectedFile) {
     return (
-      <div className={`p-4 w-80 border-gray-300 ${'bg-white text-black'}`}>
+      <div
+        className={`p-4 w-96 border-l border-gray-300 ${'bg-white text-black'}`}>
         <h2 className="mb-4 font-semibold">
           {capitalizeFirstLetter(selectedItemKey)}
         </h2>
@@ -148,7 +151,7 @@ export const InfoPanelV2 = () => {
 
   return (
     <div
-      className={`w-80 border-l flex flex-col overflow-y-auto overflow-x-hidden
+      className={`w-96 border-l flex flex-col overflow-y-auto overflow-x-hidden
       ${'bg-white border-gray-300 text-black'}`}>
       <div className="flex flex-col flex-1 p-4">
         <div className="flex justify-center mt-4 mb-8">

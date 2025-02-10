@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { FileMeta } from '@/types/file.type';
-import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
+import { useConfigApp } from '@/providers/AppConfig';
 
 export const useFileMeta = (selectedFile: FileMeta | null) => {
+  const { config } = useConfigApp();
+
   const [selectedFileMeta, setSelectedFileMeta] = useState<FileMeta | null>(
     null
   );
@@ -20,7 +22,9 @@ export const useFileMeta = (selectedFile: FileMeta | null) => {
       if (!selectedFile?.id) return;
 
       try {
-        const urlGet = `${backend_url}/ufyle/partition/${partitionId}/file/${
+        const urlGet = `${
+          config.serverApiUrl
+        }/ufyle/partition/${partitionId}/file/${
           selectedFile.id.split(':')[1]
         }/meta`;
         const response = await fetch(urlGet);

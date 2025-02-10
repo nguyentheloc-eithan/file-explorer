@@ -1,21 +1,24 @@
-import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
 import { useTriggerRefresh } from '@/core/states/refresh.state';
 import { deleteFile, getStats } from '@/lib/api/file.api';
+import { useConfigApp } from '@/providers/AppConfig';
 import { FileMeta } from '@/types/file.type';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 
 const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
   `${serverUrl}/ufyle/partition/${partitionId}/stats/RECENT_FILES`;
 
 export const useRecentPage = () => {
-  const cacheKey = RECENT_FILES_CACHE_KEY(backend_url);
+  const { config } = useConfigApp();
+
+  const cacheKey = RECENT_FILES_CACHE_KEY(config.serverApiUrl);
   const { refreshRecent, setRefreshRecent } = useTriggerRefresh();
 
   const fetcher = async () => {
     const data = await getStats({
       partitionId: partitionId,
-      serverApiUrl: backend_url,
+      serverApiUrl: config.serverApiUrl,
       typeResponse: 'RECENT_FILES',
     });
     return data.data;
@@ -31,16 +34,18 @@ export const useRecentPage = () => {
     revalidateOnReconnect: true,
   });
 
-  if (refreshRecent) {
-    mutate(undefined, {
-      revalidate: true,
-    });
-    setRefreshRecent(false);
-  }
+  useEffect(() => {
+    if (refreshRecent) {
+      mutate(undefined, {
+        revalidate: true,
+      });
+      setRefreshRecent(false);
+    }
+  }, [refreshRecent, mutate, setRefreshRecent]);
 
   const editMetaInfo = async (newMetaFile: FileMeta) => {
     try {
-      const updateUrl = `${backend_url}/ufyle/partition/${partitionId}/file/${newMetaFile?.id}/meta`;
+      const updateUrl = `${config.serverApiUrl}/ufyle/partition/${partitionId}/file/${newMetaFile?.id}/meta`;
 
       const response = await fetch(updateUrl, {
         method: 'POST',
@@ -72,7 +77,7 @@ export const useRecentPage = () => {
       await deleteFile({
         fileId,
         partitionId,
-        serverApiUrl: backend_url,
+        serverApiUrl: config.serverApiUrl,
       });
     } catch (err) {
       console.error('Error deleting file:', err);

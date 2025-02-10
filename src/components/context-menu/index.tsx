@@ -1,5 +1,6 @@
 'use client';
 
+import { refreshHandler } from '@/core/states/refresh.state';
 import { useFileActions } from '@/hooks/useFileActions';
 import { IFileBase } from '@/types/file.type';
 import {
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import type React from 'react';
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 interface ContextMenuProps {
@@ -27,7 +29,9 @@ interface ContextMenuProps {
 }
 
 export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
-  const { handleDownload, handleDelete } = useFileActions();
+  const [searchParams] = useSearchParams();
+  const activeKey = searchParams.get('ak');
+  const { handleDownload, handleDelete, copyFile, moveFile } = useFileActions();
 
   useEffect(() => {
     const handleClick = () => onClose();
@@ -46,6 +50,45 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
       case 'download':
         await handleDownload(selectedFile);
         break;
+      case 'copy': {
+        const fileId = selectedFile.id?.split(':')[1];
+        if (!fileId) {
+          toast.error('Invalid file ID for copying');
+          return;
+        }
+
+        const result = await copyFile({ fileId });
+
+        if (result.error) {
+          toast.error(`Failed to copy file: ${result.error}`);
+        } else {
+          toast.success('File copied successfully');
+          // Refresh the file list to show the newly copied file
+          refreshHandler(activeKey || '');
+        }
+        break;
+      }
+      case 'move':
+        {
+          const fileId = selectedFile.id?.split(':')[1];
+
+          if (!fileId) {
+            toast.error('Invalid file ID for moving file');
+            return;
+          }
+
+          const result = await moveFile(fileId, `${selectedFile?.name}_moved`);
+
+          if (result.error) {
+            toast.error(`Failed to move file: ${result.error}`);
+          } else {
+            toast.success('File moved successfully');
+            // Refresh the file list to show the newly copied file
+            refreshHandler(activeKey || '');
+          }
+        }
+        break;
+
       default:
         toast.info('This function is still developing');
     }
@@ -65,8 +108,8 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
         <div className="flex items-center justify-between px-2 py-1 border-b border-gray-300">
           <button
             className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
-            title="Cut"
-            onClick={() => handleMenuItemClick('cut')}>
+            title="move"
+            onClick={() => handleMenuItemClick('move')}>
             <Scissors
               size={16}
               className="text-blue-400"

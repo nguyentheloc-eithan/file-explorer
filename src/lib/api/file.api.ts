@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from 'axios';
-import { formatFileData, handleApiError } from '../utils';
-import { FileMeta, IFileBase } from '@/types/file.type';
 import { IBaseApiParams } from '@/types/api.base.type';
+import { FileMeta, IFileBase } from '@/types/file.type';
+import axios from 'axios';
+import { handleApiError } from '../utils';
 
 interface IGetStatsParams {
   typeResponse?: 'RECENT_FILES' | 'TOP_FILES' | 'ALL';
@@ -12,7 +12,7 @@ interface IGetStatsParams {
 
 interface IUfileSearch extends Omit<IBaseApiParams, 'partitionId'> {
   textSearch: string;
-  limit?: string;
+  limit?: string | number;
 }
 
 //this api to get RECENT FILES AND TOPS FILES
@@ -106,7 +106,7 @@ export const ufileSearch = async ({
     const errorMessage = response.data?.error || 'API returned success: false';
     throw new Error(errorMessage);
   }
-  return response.data.map(formatFileData);
+  return response.data;
 };
 
 interface IUploadParams extends IBaseApiParams {

@@ -1,5 +1,3 @@
-'use client';
-
 import { ContextMenu } from '@/components/context-menu';
 import { useFileStore } from '@/core/states/file.state';
 import { cn } from '@/lib/utils';
@@ -124,26 +122,26 @@ function QuickAccessItem({
 const quickAccessItems = [
   {
     icon: <Folder size={20} />,
-    name: 'Top Files',
+    name: 'Recents',
     alias: 'Frequently Used',
-    navLink: '/top-files',
+    navLink: '/recent?ak=recent',
   },
   {
     icon: <Star size={20} />,
     name: 'Starred',
     alias: 'Favorite Items',
-    navLink: '/starred',
+    navLink: '/starred?ak=starred',
   },
   {
     icon: <Users size={20} />,
     name: 'Shared',
     alias: 'Shared Files',
-    navLink: '/shared',
+    navLink: '/shared?ak=shared',
   },
   {
     icon: <Trash2 size={20} />,
     name: 'Trash',
     alias: 'Deleted Files',
-    navLink: '/trash',
+    navLink: '/trash?ak=trash',
   },
 ];

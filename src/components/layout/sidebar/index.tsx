@@ -24,7 +24,9 @@ export function Sidebar() {
   const renderSidebarItem = (item: SidebarItemType, indent = 0) => {
     const isExpanded = expandedItems.includes(item.key!);
     const activeKey = searchParams.get('ak');
-    const isActive = activeKey === item.key;
+    const qString = searchParams.get('q');
+
+    const isActive = activeKey === item.key && !qString;
     const hasChildren = !!item.children?.length;
 
     const handleClick = (event: React.MouseEvent, item: SidebarItemType) => {
@@ -47,7 +49,7 @@ export function Sidebar() {
         <button
           onClick={(event) => handleClick(event, item)}
           className={cn(
-            'flex items-center gap-2 w-full px-3 py-2 text-[14px] rounded hover:bg-gray-200 transition',
+            'flex items-center gap-2 w-full cursor-pointer px-3 py-2 text-[14px] rounded hover:bg-gray-200 transition',
             isActive && 'bg-blue-100',
             indent > 0 && 'ml-4'
           )}>

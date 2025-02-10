@@ -1,33 +1,44 @@
-import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
 import { refreshHandler } from '@/core/states/refresh.state';
+import { useSearchData } from '@/hooks/useSearch';
 import { useTags } from '@/hooks/useTags';
 import { uploadFile } from '@/lib/api/file.api';
 import { cleanActiveKey } from '@/lib/utils';
-import { ChevronDown, Copy, LayoutList, Plus, Trash } from 'lucide-react';
+import SearchResults from '@/pages/search-results-page';
+import { useConfigApp } from '@/providers/AppConfig';
+import {
+  InteractionTag,
+  InteractionTagPrimary,
+  Spinner,
+} from '@fluentui/react-components';
+import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import SelectedTagIndicator from '../tag-indicator';
 import UploadModal from '../upload-modal';
 import { HeaderLayout } from './header';
 import { InfoPanelV2 } from './info-panel';
 import { Sidebar } from './sidebar';
-
 export function UfyleLayout() {
+  const { config } = useConfigApp();
+  const { dataGlobalSearch, loadingGlobalSearch } = useSearchData();
   const { tagItems, setTagItems } = useTags();
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedItemKey, setSelectedItemKey] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const activeKey = searchParams.get('ak');
+  const qString = searchParams.get('q');
 
   useEffect(() => {
     const cleanedKey = cleanActiveKey(activeKey);
     setSelectedItemKey(cleanedKey);
   }, [activeKey]);
+
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -49,7 +60,7 @@ export function UfyleLayout() {
     setIsModalVisible(true);
   }, []);
 
-  const tableContainerClass = `w-full relative flex flex-col h-screen overflow-y-auto text-gray-900 bg-gray-100
+  const tableContainerClass = `w-full relative flex flex-col h-screen overflow-y-auto text-gray-900 bg-gray-100 bg-white
     ${isDragging ? 'ring-2 ring-blue-400 bg-blue-50' : ''}
     ${isUploading ? 'opacity-70' : ''}`;
 
@@ -61,7 +72,7 @@ export function UfyleLayout() {
       for (const { file, tags } of filesWithTags) {
         await uploadFile({
           file,
-          serverApiUrl: backend_url,
+          serverApiUrl: config.serverApiUrl,
           metaInfo: {
             name: file.name,
             tags: tags.join(','),
@@ -107,44 +118,53 @@ export function UfyleLayout() {
               New
             </button>
             <div className="w-px h-4 mx-1 bg-gray-400" />
-
-            <button
-              className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-200"
-              title="Copy">
-              <Copy size={14} />
-            </button>
-
-            <div className="w-px h-4 mx-1 bg-gray-400" />
-            <button
-              className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-200"
-              title="Delete">
-              <Trash size={16} />
-            </button>
+            {tagItems && tagItems.length > 0 && (
+              <>
+                {tagItems.map((item, index) => (
+                  <InteractionTag
+                    key={index}
+                    onClick={() => {
+                      setSearchParams({
+                        ...Object.fromEntries(searchParams.entries()),
+                        typeS: 'ref_t',
+                        q: item,
+                      });
+                    }}>
+                    <InteractionTagPrimary>
+                      <div className="flex items-center justify-center gap-[4px]">
+                        <div className="text-[12px] font-medium">#</div>
+                        <div className="text-[12px] font-medium">{item}</div>
+                      </div>
+                    </InteractionTagPrimary>
+                  </InteractionTag>
+                ))}
+              </>
+            )}
           </div>
           <div className="flex-1" />
-          <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded hover:bg-gray-200">
-              Sort
-              <ChevronDown size={16} />
-            </button>
-            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded hover:bg-gray-200">
-              View
-              <ChevronDown size={16} />
-            </button>
-            <div className="w-px h-4 mx-1 bg-gray-400" />
-            <button
-              className="p-2 rounded hover:bg-gray-200"
-              title="Details">
-              <LayoutList size={16} />
-            </button>
-          </div>
+          <SelectedTagIndicator
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
         </div>
+
         <div
           className={tableContainerClass}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}>
-          <Outlet />
+          {qString && qString !== '' ? (
+            loadingGlobalSearch ? (
+              <Spinner
+                size="extra-small"
+                label="Searching..."
+              />
+            ) : (
+              <SearchResults dataSearch={dataGlobalSearch} />
+            )
+          ) : (
+            <Outlet />
+          )}
         </div>
       </div>
 
