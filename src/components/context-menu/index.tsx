@@ -52,16 +52,16 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
   return (
     <>
       <div
-        className="fixed z-50 w-64 bg-[#2c2c2c] border border-gray-700 rounded-lg shadow-lg text-gray-200 text-[13px]"
+        className="fixed z-50 w-64 bg-white border border-gray-300 rounded-lg shadow-lg text-black text-[13px]"
         style={{
           top: y,
           left: x,
         }}
         onClick={(e) => e.stopPropagation()}>
         {/* Top toolbar */}
-        <div className="flex items-center justify-between px-2 py-1 border-b border-gray-700">
+        <div className="flex items-center justify-between px-2 py-1 border-b border-gray-300">
           <button
-            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
             title="Cut"
             onClick={() => handleMenuItemClick('cut')}>
             <Scissors
@@ -71,7 +71,7 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
             Move
           </button>
           <button
-            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
             title="Copy"
             onClick={() => handleMenuItemClick('copy')}>
             <Copy
@@ -81,7 +81,7 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
             Copy
           </button>
           <button
-            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
             title="Rename"
             onClick={() => handleMenuItemClick('rename')}>
             <FileEdit
@@ -91,7 +91,7 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
             Rename
           </button>
           <button
-            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
             title="Share"
             onClick={() => handleMenuItemClick('share')}>
             <Share
@@ -101,7 +101,7 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
             Share
           </button>
           <button
-            className="p-1.5 hover:bg-gray-600 rounded flex flex-col items-center text-[12px] justify-center"
+            className="p-1.5 hover:bg-gray-200 rounded flex flex-col items-center text-[12px] justify-center"
             title="Delete"
             onClick={() => handleMenuItemClick('delete')}>
             <Trash
@@ -190,7 +190,7 @@ function MenuItem({
 }: MenuItemProps) {
   return (
     <button
-      className="w-full px-4 py-1.5 hover:bg-gray-600 flex items-center justify-between group"
+      className="w-full px-4 py-1.5 hover:bg-gray-200 flex items-center justify-between group"
       onClick={onClick}>
       <div className="flex items-center gap-3">
         {icon}

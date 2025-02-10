@@ -1,7 +1,9 @@
 import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
+import { useTriggerRefresh } from '@/core/states/refresh.state';
 import { deleteFile, getStats } from '@/lib/api/file.api';
 import { FileMeta } from '@/types/file.type';
+import { useEffect } from 'react';
 import useSWR from 'swr';
 
 const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
@@ -9,6 +11,7 @@ const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
 
 export const useHome = () => {
   const cacheKey = RECENT_FILES_CACHE_KEY(backend_url);
+  const { refreshHome, setRefreshHome } = useTriggerRefresh();
 
   const fetcher = async () => {
     const data = await getStats({
@@ -69,6 +72,13 @@ export const useHome = () => {
       throw error;
     }
   };
+
+  useEffect(() => {
+    if (refreshHome) {
+      mutate(undefined, { revalidate: true });
+      setRefreshHome(false);
+    }
+  }, [mutate, refreshHome, setRefreshHome]);
 
   return {
     recentFilesData: recentFiles,

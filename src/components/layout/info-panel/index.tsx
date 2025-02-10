@@ -11,7 +11,7 @@ import { backend_url } from '@/configs/app-config';
 import { partitionId } from '@/constants/partition-id';
 import { useSearchParams } from 'react-router-dom';
 import { useFileStore } from '@/core/states/file.state';
-import { useTriggerRefresh } from '@/core/states/refresh.state';
+import { refreshHandler, useTriggerRefresh } from '@/core/states/refresh.state';
 import { downloadFile } from '@/lib/api/file.api';
 
 export const InfoPanelV2 = () => {
@@ -128,6 +128,7 @@ export const InfoPanelV2 = () => {
       });
     } finally {
       setIsEditing(false);
+      refreshHandler(activeKey as string);
     }
   };
 

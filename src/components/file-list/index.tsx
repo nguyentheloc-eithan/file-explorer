@@ -29,10 +29,14 @@ export function FileDataVisualization({
   };
 
   return (
-    <div className="overflow-auto">
-      <div className="grid grid-cols-[1fr_200px_150px_100px] gap-1 p-2 text-[13px] border-b border-gray-800">
+    <div className="overflow-auto bg-white">
+      <div className="grid grid-cols-[1fr_200px_150px_100px] gap-1 p-2 text-[13px] border-b border-gray-300 bg-gray-50">
         {columns.map((column, index) => (
-          <div key={index}>{column}</div>
+          <div
+            key={index}
+            className="font-medium text-gray-700">
+            {column}
+          </div>
         ))}
       </div>
       {dataSources?.map((file: IFileBase) => (
@@ -42,24 +46,26 @@ export function FileDataVisualization({
           onContextMenu={(e) => handleRightClick(e, file)}
           className={cn(
             'group grid grid-cols-[1fr_200px_150px_100px] gap-1 p-2 text-[13px]',
-            'border-b border-gray-800/10 cursor-default select-none',
+            'border-b border-gray-300 cursor-pointer select-none',
             'transition-colors duration-100',
-            'hover:bg-gray-200',
-            selectedRow?.id === file.id && 'bg-blue-100'
+            'hover:bg-gray-100',
+            selectedRow?.id === file.id && 'bg-blue-50'
           )}>
           <div className="flex items-center gap-2">
             <File
               size={16}
               className={cn(
-                'text-gray-400',
-                'group-hover:text-blue-400',
-                selectedRow?.id === file.id && 'text-blue-400'
+                'text-gray-500',
+                'group-hover:text-blue-500',
+                selectedRow?.id === file.id && 'text-blue-500'
               )}
             />
             {file.name}
           </div>
-          <div>{file?.mtime || '05/02/2025 8:51 pm'}</div>
-          <div>{file.alias}</div>
+          <div className="text-gray-500">
+            {file?.mtime || '05/02/2025 8:51 pm'}
+          </div>
+          <div className="text-gray-500">{file.alias}</div>
         </div>
       ))}
     </div>
