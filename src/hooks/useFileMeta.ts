@@ -31,7 +31,7 @@ export const useFileMeta = (fileId: string | undefined) => {
     };
 
     fetchFileMeta();
-  }, [fileId]);
+  }, [config.serverApiUrl, fileId]);
 
   return { fileMeta, setFileMeta, isLoading };
 };

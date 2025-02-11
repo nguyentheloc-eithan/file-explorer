@@ -5,12 +5,15 @@ import './index.css';
 import { ToastContainer } from 'react-toastify';
 import { ConfigAppProvider } from './providers/AppConfig.tsx';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+import { PartitionsProvider } from './providers/PartitionsContext.tsx';
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <FluentProvider theme={webLightTheme}>
       <ConfigAppProvider>
-        <App />
-        <ToastContainer />
+        <PartitionsProvider>
+          <ToastContainer />
+          <App />
+        </PartitionsProvider>
       </ConfigAppProvider>
     </FluentProvider>
   </BrowserRouter>

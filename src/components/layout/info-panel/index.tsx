@@ -137,11 +137,11 @@ export const InfoPanelV2 = () => {
   if (!selectedFile) {
     return (
       <div
-        className={`p-4 w-96 border-l border-gray-300 ${'bg-white text-black'}`}>
+        className={`p-4 w-80 border-l border-gray-300 ${'bg-white text-black'}`}>
         <h2 className="mb-4 font-semibold">
           {capitalizeFirstLetter(selectedItemKey)}
         </h2>
-        <p className="text-[13px]">
+        <p className="text-sm">
           Select a single file to get more information and share your cloud
           content.
         </p>
@@ -151,10 +151,10 @@ export const InfoPanelV2 = () => {
 
   return (
     <div
-      className={`w-96 border-l flex flex-col overflow-y-auto overflow-x-hidden
+      className={`w-80 border-l flex flex-col overflow-y-auto overflow-x-hidden
       ${'bg-white border-gray-300 text-black'}`}>
       <div className="flex flex-col flex-1 p-4">
-        <div className="flex justify-center mt-4 mb-8">
+        <div className="flex justify-center mt-2 mb-8">
           <div className="relative">
             <FileIcon
               size={64}
@@ -163,7 +163,7 @@ export const InfoPanelV2 = () => {
           </div>
         </div>
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold break-words">
+          <h2 className="text-lg font-semibold text-center break-words">
             {isEditing ? (
               <input
                 type="text"

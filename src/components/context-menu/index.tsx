@@ -102,7 +102,7 @@ export function ContextMenu({ x, y, onClose, selectedFile }: ContextMenuProps) {
   return (
     <>
       <div
-        className="fixed z-50 w-64 bg-white border border-gray-300 rounded-lg shadow-lg text-black text-[13px]"
+        className="fixed z-50 w-64 bg-white border border-gray-300 rounded-lg shadow-lg text-black text-sm"
         style={{
           top: y,
           left: x,

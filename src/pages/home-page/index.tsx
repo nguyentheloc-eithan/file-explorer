@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useHome } from './hook';
 
 export function HomePage() {
-  const { recentFilesData } = useHome();
+  const { statsData } = useHome();
   const { selectedFile, setSelectedFile } = useFileStore();
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     show: false,
@@ -53,7 +53,7 @@ export function HomePage() {
             Recent Files
           </h2>
           <div className="space-y-1">
-            {recentFilesData?.map((file: IFileBase) => (
+            {statsData?.map((file: IFileBase) => (
               <div
                 key={file.id}
                 onContextMenu={(e) => handleContextMenu(e, file)}

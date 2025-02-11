@@ -22,7 +22,7 @@ export const FileDetails = ({
 }: FileDetailsProps) => (
   <div className="mt-8 bg-white">
     <h3 className="mb-4 font-semibold text-gray-900">Details</h3>
-    <div className="space-y-2 text-[13px] text-gray-800">
+    <div className="space-y-2 text-sm text-gray-800">
       <DetailField
         label="Alias"
         value={selectedFileMeta?.alias}
@@ -80,10 +80,10 @@ export const FileDetails = ({
               <textarea
                 value={editedValues.synopsis || ''}
                 onChange={(e) => onInputChange('synopsis', e.target.value)}
-                className="w-full h-24 bg-white border border-gray-300 px-2 py-1 rounded text-gray-900 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-24 bg-white border border-gray-300 px-2 py-1 rounded text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-[13px] text-gray-600">
+              <p className="text-sm text-gray-600">
                 {selectedFileMeta?.synopsis}
               </p>
             )}
@@ -94,10 +94,10 @@ export const FileDetails = ({
               <textarea
                 value={editedValues.comment || ''}
                 onChange={(e) => onInputChange('comment', e.target.value)}
-                className="w-full h-24 bg-white border border-gray-300 px-2 py-1 rounded text-gray-900 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-24 bg-white border border-gray-300 px-2 py-1 rounded text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             ) : (
-              <p className="text-[13px] text-gray-600">
+              <p className="text-sm text-gray-600">
                 {selectedFileMeta?.comment}
               </p>
             )}
