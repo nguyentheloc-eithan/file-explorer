@@ -20,11 +20,12 @@ import UploadModal from '../upload-modal';
 import { HeaderLayout } from './header';
 import { InfoPanelV2 } from './info-panel';
 import { Sidebar } from './sidebar';
+import { usePartitions } from '@/providers/PartitionsContext';
 export function UfyleLayout() {
   const { config } = useConfigApp();
+  const { partitions } = usePartitions();
   const { dataGlobalSearch, loadingGlobalSearch } = useSearchData();
   const { tagItems, setTagItems } = useTags();
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedItemKey, setSelectedItemKey] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
@@ -104,7 +105,10 @@ export function UfyleLayout() {
         tagItems={tagItems}
         setTagItems={setTagItems}
       />
-      <Sidebar />
+      <Sidebar
+        partitions={partitions}
+        appConfig={config}
+      />
 
       <div className="flex flex-col flex-1">
         {/* Header toolbar */}
@@ -113,7 +117,7 @@ export function UfyleLayout() {
         {/* Actions toolbar */}
         <div className="flex items-center h-12 gap-2 px-2 bg-white border-b border-gray-300 shadow-sm">
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-[13px] rounded cursor-pointer hover:bg-gray-200">
+            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-200">
               <Plus size={16} />
               New
             </button>

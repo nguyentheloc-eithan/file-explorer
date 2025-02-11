@@ -73,13 +73,14 @@ export const DetailField = ({
   };
 
   return (
-    <div className="grid items-center grid-cols-2 gap-2">
-      <span className="text-gray-700">{label}</span>
+    <div className="grid items-center grid-cols-3 gap-2">
+      <span className="col-span-1 text-gray-700">{label}</span>
       {isEditing && editable ? (
         isTag ? (
           <Select
             mode="tags"
             value={items}
+            className="w-full col-span-2"
             maxTagCount="responsive"
             onChange={(newTags) => {
               setItems(newTags);
@@ -107,18 +108,17 @@ export const DetailField = ({
               </>
             )}
             options={tagItems.map((tag) => ({ label: tag, value: tag }))}
-            className="w-full"
           />
         ) : (
           <input
             type="text"
             defaultValue={editedValues[field]?.toString() || ''}
             onChange={(e) => onInputChange(field, e.target.value)}
-            className="bg-white border border-gray-300 px-2 py-1 rounded text-gray-900 text-[13px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full col-span-2 px-2 py-1 text-sm text-gray-900 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         )
       ) : (
-        <span className="text-gray-900">{value}</span>
+        <span className="w-full col-span-2 text-gray-900">{value}</span>
       )}
     </div>
   );

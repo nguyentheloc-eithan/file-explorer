@@ -5,10 +5,8 @@ import { useConfigApp } from '@/providers/AppConfig';
 import { FileMeta } from '@/types/file.type';
 import { useEffect } from 'react';
 import useSWR from 'swr';
-
 const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
   `${serverUrl}/ufyle/partition/${partitionId}/stats/RECENT_FILES`;
-
 export const useRecentPage = () => {
   const { config } = useConfigApp();
 

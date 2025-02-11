@@ -49,7 +49,7 @@ export const HeaderLayout = ({ selectedItemKey }: IHeaderLayoutProp) => {
             type="text"
             onChange={(e) => handleSearch(e.target.value)}
             placeholder={`Search at ${capitalizeFirstLetter(selectedItemKey)}`}
-            className="w-full bg-gray-50 border border-gray-300 rounded px-8 py-1 text-[13px] focus:outline-none focus:border-blue-500"
+            className="w-full bg-gray-50 border border-gray-300 rounded px-8 py-1 text-sm focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>

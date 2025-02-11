@@ -1,25 +1,27 @@
-import { partitionId } from '@/constants/partition-id';
 import { useTriggerRefresh } from '@/core/states/refresh.state';
 import { deleteFile, getStats } from '@/lib/api/file.api';
 import { useConfigApp } from '@/providers/AppConfig';
 import { FileMeta } from '@/types/file.type';
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useSWR from 'swr';
 
-const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
-  `${serverUrl}/ufyle/partition/${partitionId}/stats/home`;
-
-export const useHome = () => {
+export const usePartitionPage = () => {
   const { config } = useConfigApp();
+  const [searchParams] = useSearchParams();
+  const partitionId = searchParams.get('pid');
+
+  const RECENT_FILES_CACHE_KEY = (serverUrl: string) =>
+    `${serverUrl}/ufyle/partition/${partitionId}/stats/RECENT_FILES`;
 
   const cacheKey = RECENT_FILES_CACHE_KEY(config.serverApiUrl);
-  const { refreshHome, setRefreshHome } = useTriggerRefresh();
+  const { refreshRecent, setRefreshRecent } = useTriggerRefresh();
 
   const fetcher = async () => {
     const data = await getStats({
-      partitionId: partitionId,
+      partitionId: partitionId || '',
       serverApiUrl: config.serverApiUrl,
-      typeResponse: 'RECENT_FILES',
+      typeResponse: 'TOP_FILES',
     });
     return data.data;
   };
@@ -33,6 +35,16 @@ export const useHome = () => {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   });
+
+  useEffect(() => {
+    if (refreshRecent) {
+      mutate(undefined, {
+        revalidate: true,
+      });
+      setRefreshRecent(false);
+    }
+  }, [refreshRecent, mutate, setRefreshRecent]);
+
   const editMetaInfo = async (newMetaFile: FileMeta) => {
     try {
       const updateUrl = `${config.serverApiUrl}/ufyle/partition/${partitionId}/file/${newMetaFile?.id}/meta`;
@@ -51,7 +63,7 @@ export const useHome = () => {
 
       const result = await response.json();
 
-      await mutate(undefined, {
+      mutate(undefined, {
         revalidate: true,
       });
 
@@ -66,24 +78,17 @@ export const useHome = () => {
     try {
       await deleteFile({
         fileId,
-        partitionId,
+        partitionId: partitionId || '',
         serverApiUrl: config.serverApiUrl,
       });
     } catch (err) {
-      console.error('Error delete file:', err);
-      throw error;
+      console.error('Error deleting file:', err);
+      throw err;
     }
   };
 
-  useEffect(() => {
-    if (refreshHome) {
-      mutate(undefined, { revalidate: true });
-      setRefreshHome(false);
-    }
-  }, [mutate, refreshHome, setRefreshHome]);
-
   return {
-    statsData: recentFiles,
+    recentFilesData: recentFiles,
     editMetaInfo,
     isLoading,
     deleteFileData,

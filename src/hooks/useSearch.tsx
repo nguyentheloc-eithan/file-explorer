@@ -28,7 +28,7 @@ export const useSearchData = () => {
       timeoutId = setTimeout(async () => {
         try {
           const response = await ufileSearch({
-            textSearch: qString,
+            textSearch: qString || '',
             serverApiUrl: config.serverApiUrl,
             limit: 50,
           });

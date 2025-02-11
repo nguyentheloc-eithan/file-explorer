@@ -8,7 +8,7 @@ export default function NotFoundPage() {
         The page you are looking for doesn't exist.
       </p>
       <Link
-        to="/"
+        to="/home?ak=home"
         className="px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-600">
         Go to Home
       </Link>

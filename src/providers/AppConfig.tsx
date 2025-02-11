@@ -1,19 +1,15 @@
-import { partitionId } from '@/constants/partition-id';
-import { getDirs, getTags } from '@/lib/api/refs.api';
 import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-interface Config {
+export interface IAppConfig {
   serverApiUrl: string;
 }
 
 interface ConfigContextType {
-  config: Config;
-  saveConfig: (config: Config) => void;
+  config: IAppConfig;
+  saveConfig: (config: IAppConfig) => void;
   loadConfig: () => void;
   isLoadingConfig: boolean;
-  partitionTags: string[];
-  partitionDirs: string[];
 }
 
 const generateHash = (data: string): string => {
@@ -40,8 +36,6 @@ export const ConfigAppContext = createContext<ConfigContextType>({
   saveConfig: () => {},
   loadConfig: () => {},
   isLoadingConfig: true,
-  partitionTags: [],
-  partitionDirs: [],
 });
 
 interface ConfigAppProviderProps {
@@ -51,10 +45,8 @@ interface ConfigAppProviderProps {
 export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
   children,
 }) => {
-  const [config, setConfigState] = useState<Config>({ serverApiUrl: '' });
+  const [config, setConfigState] = useState<IAppConfig>({ serverApiUrl: '' });
   const [isLoading, setIsLoading] = useState(true);
-  const [tags, setTags] = useState<string[]>([]);
-  const [dirs, setDirs] = useState<string[]>([]);
 
   const getBasePath = (): string => {
     const isLocalhost = /^localhost|127\.0\.0\.1|0\.0\.0\.0$/.test(
@@ -102,7 +94,9 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
       }
 
       if (data?.app_config?.endpoint) {
-        const newConfig: Config = { serverApiUrl: data.app_config.endpoint };
+        const newConfig: IAppConfig = {
+          serverApiUrl: data.app_config.endpoint,
+        };
         saveConfig(newConfig);
         setConfigState(newConfig);
       } else {
@@ -114,23 +108,8 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
       setIsLoading(false);
     }
   };
-  const fetchTagsAndDirs = async (serverApiUrl: string) => {
-    try {
-      const [fetchedTags, fetchedDirs] = await Promise.all([
-        getTags({ partitionId, serverApiUrl }),
-        getDirs({ partitionId, serverApiUrl }),
-      ]);
-      const uniqueTags: string[] = Array.from(new Set(fetchedTags));
-      const uniqueDirs: string[] = Array.from(new Set(fetchedDirs));
 
-      setTags(uniqueTags);
-      setDirs(uniqueDirs);
-    } catch (error) {
-      console.error('Failed to fetch tags and dirs:', error);
-    }
-  };
-
-  const saveConfig = (newConfig: Config) => {
+  const saveConfig = (newConfig: IAppConfig) => {
     const rawConfig = encodeURIComponent(JSON.stringify(newConfig));
     const hash = generateHash(rawConfig);
     setCookie('CONFIG_APP', rawConfig, 7);
@@ -154,8 +133,6 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
         saveConfig,
         loadConfig,
         isLoadingConfig: isLoading,
-        partitionTags: tags,
-        partitionDirs: dirs,
       }}>
       {children}
     </ConfigAppContext.Provider>

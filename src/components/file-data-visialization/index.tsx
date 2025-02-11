@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IFileBase } from '@/types/file.type';
 import { File } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -57,6 +57,10 @@ export function FileDataVisualization({
   const { targetFileRename, setTargetFileRename } = useFileStore();
   const [localData, setLocalData] = useState<IFileBase[]>(dataSources);
 
+  useEffect(() => {
+    setLocalData(dataSources);
+  }, [dataSources]);
+
   const handleClick = (file: IFileBase) => {
     if (onClick) onClick(file);
   };
@@ -86,7 +90,6 @@ export function FileDataVisualization({
         serverApiUrl: config?.serverApiUrl,
       });
     } catch (err) {
-      // Even if the API call fails, we keep the local change
       console.error('Failed to rename file:', err);
     } finally {
       setTargetFileRename(null);

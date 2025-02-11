@@ -6,17 +6,16 @@ import { useFileStore } from '@/core/states/file.state';
 import { ContextMenuState } from '@/types/context-menu.type';
 import { IFileBase } from '@/types/file.type';
 import { useState } from 'react';
-import { useRecentPage } from './hook';
+import { usePartitionPage } from './hook';
 
-export function RecentPage() {
-  const { recentFilesData } = useRecentPage();
+export function PartitionPage() {
+  const { recentFilesData } = usePartitionPage();
   const { selectedFile, setSelectedFile } = useFileStore();
   const [contextMenu, setContextMenu] = useState<ContextMenuState>({
     show: false,
     x: 0,
     y: 0,
   });
-  console.log('recentFilesData', recentFilesData);
   const handleContextMenu = (e: React.MouseEvent, file: IFileBase) => {
     e.preventDefault();
     setContextMenu({

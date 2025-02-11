@@ -15,7 +15,6 @@ interface IUfileSearch extends Omit<IBaseApiParams, 'partitionId'> {
   limit?: string | number;
 }
 
-//this api to get RECENT FILES AND TOPS FILES
 export const getStats = async ({
   typeResponse = 'ALL',
   serverApiUrl,
@@ -29,27 +28,30 @@ export const getStats = async ({
   if (data && data.data) {
     const { recent, 'top-50': top50 } = data.data;
 
-    const formattedTop50 = top50
-      ? {
-          ...top50,
-          searchString: top50['file-write']?.join(',') || '',
-        }
+    const formattedTop50 = top50?.['file-write']?.length
+      ? { ...top50, searchString: top50['file-write'].join(',') }
       : null;
 
-    const formatRecent = recent
-      ? {
-          ...recent,
-          searchString: recent['file-write']?.join(',') || '',
-        }
+    const formatRecent = recent?.['file-write']?.length
+      ? { ...recent, searchString: recent['file-write'].join(',') }
       : null;
 
+    console.log('Formatted Recent:', formatRecent);
+    console.log('Formatted Top 50:', formattedTop50);
+
+    // Only call APIs if searchString exists, otherwise return empty array
     const [dataRecentFile, dataTop50File] = await Promise.all([
-      axios.get(
-        `${serverApiUrl}/ufyle/search?q=${formatRecent?.searchString}&limit=100`
-      ),
-      axios.get(
-        `${serverApiUrl}/ufyle/search?q=${formattedTop50?.searchString}&limit=100`
-      ),
+      formatRecent
+        ? axios.get(
+            `${serverApiUrl}/ufyle/search?q=${formatRecent.searchString}&limit=100`
+          )
+        : Promise.resolve({ data: [] }),
+
+      formattedTop50
+        ? axios.get(
+            `${serverApiUrl}/ufyle/search?q=${formattedTop50.searchString}&limit=100`
+          )
+        : Promise.resolve({ data: [] }),
     ]);
 
     switch (typeResponse) {
@@ -155,6 +157,7 @@ export const deleteFile = async ({
 };
 export const editFileMeta = async () => {};
 export const getFileMeta = async () => {};
+
 interface IRenameFileParams extends IBaseApiParams {
   values: any;
   fileId: string;
