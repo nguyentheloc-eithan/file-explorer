@@ -30,12 +30,16 @@ export function Sidebar({
   const [editValue, setEditValue] = useState<string>('');
   const [partitions, setPartitions] = useState<Partition[]>(initialPartitions);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { setSelectedFile } = useFileStore();
 
   useEffect(() => {
     setPartitions(initialPartitions);
-  }, [initialPartitions]);
+    const ak = searchParams.get('ak');
+    if (!ak) {
+      setSearchParams({ ak: 'home' });
+    }
+  }, [initialPartitions, searchParams, setSearchParams]);
 
   const sidebarItems = useMemo(() => {
     const homeIndex = sidebarConfig.findIndex((item) => item.key === 'home');
@@ -50,7 +54,7 @@ export function Sidebar({
 
     return [
       ...sidebarConfig.slice(0, homeIndex + 1),
-      ...partitionItems,
+      // ...partitionItems,
       ...sidebarConfig.slice(homeIndex + 1),
     ];
   }, [partitions]);

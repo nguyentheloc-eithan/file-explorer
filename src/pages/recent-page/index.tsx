@@ -16,7 +16,6 @@ export function RecentPage() {
     x: 0,
     y: 0,
   });
-  console.log('recentFilesData', recentFilesData);
   const handleContextMenu = (e: React.MouseEvent, file: IFileBase) => {
     e.preventDefault();
     setContextMenu({

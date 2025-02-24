@@ -47,20 +47,20 @@ export const useTriggerFunction = () => {
   };
 
   const deleteFile = async (fileId: string) => {
-    console.log(`File ${fileId} deleted`);
+    // console.log(`File ${fileId} deleted`);
   };
 
   const downloadFile = async (fileId: string) => {
-    console.log(`File ${fileId} downloaded`);
+    // console.log(`File ${fileId} downloaded`);
   };
 
   const editFile = async (fileId: string) => {
-    console.log(`File ${fileId} edited`);
+    // console.log(`File ${fileId} edited`);
   };
 
   // Example trigger function for file move (could be updated later)
   const moveFile = async (fileId: string) => {
-    console.log(`File ${fileId} moved`);
+    // console.log(`File ${fileId} moved`);
   };
 
   return {
