@@ -1,3 +1,4 @@
+import { partitionId } from '@/constants/partition-id';
 import { useConfigApp } from '@/providers/AppConfig';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -15,7 +16,7 @@ export function useTags() {
   useEffect(() => {
     const getTags = async () => {
       // const url = `${config.serverApiUrl}/ufyle/search-ref?q=tag`;
-      const url = `${config.serverApiUrl}/ufyle/partition/${pid}/tags`;
+      const url = `${config.serverApiUrl}/ufyle/partition/${partitionId}/tags`;
 
       try {
         const response = await axios.get(url);
@@ -27,10 +28,11 @@ export function useTags() {
         console.error('Error fetching tags:', error);
       }
     };
-    if (ak == 'home') {
-      setTagItems([]);
-    }
-    if (pid) getTags();
+    // if (ak == 'home') {
+    //   setTagItems([]);
+    // }
+    // if (pid) getTags();
+    getTags();
   }, [ak, config.serverApiUrl, pid]);
 
   return { tagItems, setTagItems };

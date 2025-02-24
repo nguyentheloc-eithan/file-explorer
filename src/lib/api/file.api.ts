@@ -36,9 +36,6 @@ export const getStats = async ({
       ? { ...recent, searchString: recent['file-write'].join(',') }
       : null;
 
-    console.log('Formatted Recent:', formatRecent);
-    console.log('Formatted Top 50:', formattedTop50);
-
     // Only call APIs if searchString exists, otherwise return empty array
     const [dataRecentFile, dataTop50File] = await Promise.all([
       formatRecent

@@ -6,12 +6,12 @@ import { uploadFile } from '@/lib/api/file.api';
 import { cleanActiveKey } from '@/lib/utils';
 import SearchResults from '@/pages/search-results-page';
 import { useConfigApp } from '@/providers/AppConfig';
+import { usePartitions } from '@/providers/PartitionsContext';
 import {
   InteractionTag,
   InteractionTagPrimary,
   Spinner,
 } from '@fluentui/react-components';
-import { Plus } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -20,7 +20,6 @@ import UploadModal from '../upload-modal';
 import { HeaderLayout } from './header';
 import { InfoPanelV2 } from './info-panel';
 import { Sidebar } from './sidebar';
-import { usePartitions } from '@/providers/PartitionsContext';
 export function UfyleLayout() {
   const { config } = useConfigApp();
   const { partitions } = usePartitions();
@@ -117,10 +116,10 @@ export function UfyleLayout() {
         {/* Actions toolbar */}
         <div className="flex items-center h-12 gap-2 px-2 bg-white border-b border-gray-300 shadow-sm">
           <div className="flex items-center gap-1">
-            <button className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-200">
+            {/* <button className="flex items-center gap-1 px-3 py-1 text-sm rounded cursor-pointer hover:bg-gray-200">
               <Plus size={16} />
               New
-            </button>
+            </button> */}
             <div className="w-px h-4 mx-1 bg-gray-400" />
             {tagItems && tagItems.length > 0 && (
               <>

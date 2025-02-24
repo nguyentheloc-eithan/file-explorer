@@ -6,13 +6,14 @@ import TopFilesPage from '@/pages/top-files-page';
 import NotFoundPage from '@/pages/not-found-page';
 import { RouteConfig } from '@/types/route.type';
 import { PartitionPage } from '@/pages/partition-page';
+import UnderConstruction from '@/components/common/alerts/UnderConstruction';
 
 export const defaultRoutes: RouteConfig[] = [
   {
     path: '/',
     element: (
       <Navigate
-        to="/home?ak=home"
+        to="/home"
         replace
       />
     ),
@@ -31,7 +32,7 @@ export const defaultRoutes: RouteConfig[] = [
       },
       {
         path: 'starred',
-        element: <div>Starred</div>,
+        element: <UnderConstruction />,
       },
       {
         path: 'recent',
@@ -39,11 +40,11 @@ export const defaultRoutes: RouteConfig[] = [
       },
       {
         path: 'shared',
-        element: <div>Shared</div>,
+        element: <UnderConstruction />,
       },
       {
         path: 'trash',
-        element: <div>Trash</div>,
+        element: <UnderConstruction />,
       },
       {
         path: 'partition',
