@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export interface IAppConfig {
@@ -48,20 +47,6 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
   const [config, setConfigState] = useState<IAppConfig>({ serverApiUrl: '' });
   const [isLoading, setIsLoading] = useState(true);
 
-  const getBasePath = (): string => {
-    const isLocalhost = /^localhost|127\.0\.0\.1|0\.0\.0\.0$/.test(
-      window.location.hostname
-    );
-    if (isLocalhost) {
-      return 'https://ufyle.dision.dev';
-    }
-
-    const match = window.location.pathname.match(/\/uf\/?(.*)/);
-    return match
-      ? `${window.location.origin}/uf/${match[1]}`
-      : window.location.origin;
-  };
-
   const loadConfig = async () => {
     setIsLoading(true);
     const rawConfig = getCookie('CONFIG_APP');
@@ -82,16 +67,9 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
     }
 
     try {
-      const basePath = getBasePath();
-      const response = await axios.get(`${basePath}/config`);
-
-      let data;
-      if (typeof response.data === 'string') {
-        // Parse the raw JSON string manually if it's not an object
-        data = JSON.parse(response.data);
-      } else {
-        data = response.data;
-      }
+      // Fetch config.json from the public folder
+      const response = await fetch('/config.json');
+      const data = await response.json();
 
       if (data?.app_config?.endpoint) {
         const newConfig: IAppConfig = {
@@ -100,10 +78,10 @@ export const ConfigAppProvider: React.FC<ConfigAppProviderProps> = ({
         saveConfig(newConfig);
         setConfigState(newConfig);
       } else {
-        console.error('Invalid response from backend');
+        console.error('Invalid config.json: Missing app_config.endpoint');
       }
     } catch (error) {
-      console.error('Failed to fetch config:', error);
+      console.error('Failed to load config.json:', error);
     } finally {
       setIsLoading(false);
     }
